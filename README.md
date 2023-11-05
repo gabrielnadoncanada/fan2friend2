@@ -77,12 +77,12 @@ You're ready to go! Visit the url in your browser, and login with:
 ### Relations
 
 #### BelongsTo
-- ProductResource
+- CelebrityResource
 - OrderResource
 - PostResource
 
 #### BelongsToMany
-- CategoryResource\RelationManagers\ProductsRelationManager
+- CategoryResource\RelationManagers\CelebritiesRelationManager
 
 #### HasMany
 - OrderResource\RelationManagers\PaymentsRelationManager
@@ -94,9 +94,9 @@ You're ready to go! Visit the url in your browser, and login with:
 - OrderResource -> Address
 
 #### MorphMany
-- ProductResource\RelationManagers\CommentsRelationManager
+- CelebrityResource\RelationManagers\CommentsRelationManager
 - PostResource\RelationManagers\CommentsRelationManager
 
 #### MorphToMany
-- BrandResource\RelationManagers\AddressRelationManager
+- PartnerResource\RelationManagers\AddressRelationManager
 - CustomerResource\RelationManagers\AddressRelationManager

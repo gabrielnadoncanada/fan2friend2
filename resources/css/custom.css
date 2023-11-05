@@ -1,0 +1,13 @@
+.gradient-to-98 {
+    background: linear-gradient(98deg, #FE3448 0%, #E82399 100%) 0 0 no-repeat padding-box !important;
+}
+
+.btn {
+    @apply text-[15px] px-[30px] font-bold py-[22px] rounded-[300px] leading-[0];
+}
+
+.text-gradient {
+    @apply gradient-to-98;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

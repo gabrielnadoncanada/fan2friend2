@@ -1,0 +1,76 @@
+@layer base {
+
+    /*body, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h6, .h6, .btn, p, .p {*/
+    /*    font-size: clamp(calc(var(--min-font-size) * 1px), calc(var(--font-size) * 1px), calc(var(--font-size) / (1920 / 100) * 1vw));*/
+    /*    line-height: calc(var(--line-height-px) / var(--font-size));*/
+    /*}*/
+    body {
+        /*--font-size: 18;*/
+        /*--min-font-size: 18;*/
+        /*--line-height-px: 21;*/
+        @apply font-normal text-almost-black text-base leading-[19px];
+    }
+
+    .unnamed-character-style-1 {
+        @apply font-bold text-almost-black text-lg leading-[19px];
+    }
+
+    .p {
+        @apply font-normal text-[18px] leading-[21px];
+    }
+
+    .h1 {
+        @apply font-bold text-[3rem] leading-[1];
+    }
+
+    .h2 {
+        @apply font-bold text-almost-black text-3xl leading-[41px];
+    }
+
+    .h3 {
+        @apply font-bold text-almost-black text-2xl leading-[28px];
+    }
+
+
+
+    /*h1,*/
+    /*.h1 {*/
+    /*    --font-size: 96;*/
+    /*    --min-font-size: 40;*/
+    /*    --line-height-px: 96;*/
+    /*}*/
+    /*h2,*/
+    /*.h2 {*/
+    /*    --font-size: 64;*/
+    /*    --min-font-size: 40;*/
+    /*    --line-height-px: 64;*/
+    /*}*/
+    /*h3,*/
+    /*.h3 {*/
+    /*    --font-size: 48;*/
+    /*    --min-font-size: 34;*/
+    /*    --line-height-px: 48;*/
+    /*}*/
+    /*h4,*/
+    /*.h4 {*/
+    /*    --font-size: 36;*/
+    /*    --min-font-size: 32;*/
+    /*    --line-height-px: 36;*/
+    /*}*/
+    /*h6,*/
+    /*.h6 {*/
+    /*    --font-size: 22;*/
+    /*    --min-font-size: 18;*/
+    /*    --line-height-px: 28;*/
+    /*}*/
+    /*.btn {*/
+    /*    --font-size: 32;*/
+    /*    --min-font-size: 16;*/
+    /*    --line-height-px: 32;*/
+    /*}*/
+    /*p {*/
+    /*    --font-size: 20;*/
+    /*    --min-font-size: 18;*/
+    /*    --line-height-px: 30;*/
+    /*}*/
+}
