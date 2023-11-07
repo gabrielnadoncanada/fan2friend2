@@ -63,7 +63,7 @@
         @if(Auth::check())
             <a href="/" class="btn gradient-to-98 text-white">{{ __('Retour à l\'accueil') }}</a>
         @else
-            <a href="/login" class="btn gradient-to-98 text-white">{{ __('Connexion') }}</a>
+            <a href="/admin" class="btn gradient-to-98 text-white">{{ __('Connexion') }}</a>
         @endif
     </div>
 </header>

@@ -13,16 +13,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Order extends Model
 {
     use HasFactory;
-    use SoftDeletes;
-
-    /**
-     * @var string
-     */
-    protected $table = 'orders';
-
-    /**
-     * @var array<int, string>
-     */
+    
     protected $fillable = [
         'number',
         'status',
@@ -38,14 +29,14 @@ class Order extends Model
         return $this->morphOne(OrderAddress::class, 'addressable');
     }
 
-    public function customer(): BelongsTo
+    public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class);
     }
 
-    public function items(): HasMany
+    public function orderItems()
     {
-        return $this->hasMany(OrderItem::class, 'order_id');
+        return $this->hasMany(OrderItem::class);
     }
 
     public function payments(): HasMany

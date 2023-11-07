@@ -9,8 +9,6 @@ class Address extends Model
 {
     use HasFactory;
 
-    protected $table = 'addresses';
-
     public function customers()
     {
         return $this->morphedByMany(Customer::class, 'addressable');

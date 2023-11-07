@@ -2,14 +2,7 @@
 
 namespace App\Providers;
 
-use App\Livewire\Data\Day;
-use App\Livewire\Data\DayLabel;
-use App\Livewire\Data\Event;
-use App\Livewire\Data\Month;
-use App\Livewire\Data\TimeLabel;
-use App\Livewire\Data\Week;
-use App\Livewire\Data\Year;
-use App\Services\Calendar;
+
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
@@ -58,15 +51,5 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
-
-        Calendar::createEventUsing(Event::class);
-
-        Calendar::createDayUsing(Day::class);
-        Calendar::createMonthUsing(Month::class);
-        Calendar::createWeekUsing(Week::class);
-        Calendar::createYearUsing(Year::class);
-
-        Calendar::createDayLabelUsing(DayLabel::class);
-        Calendar::createTimeLabelUsing(TimeLabel::class);
     }
 }

@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -15,25 +17,40 @@ class Celebrity extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-    /**
-     * @var string
-     */
-    protected $table = 'celebrities';
+    const PLACEHOLDER_IMAGE_URL = 'https://demofilament.test/placeholder.png';
 
-    /**
-     * @var array<string, string>
-     */
     protected $casts = [
         'featured' => 'boolean',
         'is_visible' => 'boolean',
         'published_at' => 'date',
-        'schedules' => 'array',
         'variations' => 'array',
+        'scheduleRules' => 'array',
     ];
+
+    public function weeklySchedules()
+    {
+        return $this->hasMany(WeeklySchedule::class);
+    }
+
+    public function overrideDates()
+    {
+        return $this->hasMany(OverrideDate::class);
+    }
+
+    public function services()
+    {
+        return $this->hasMany(Service::class);
+    }
+
 
     public function getCategoryAttribute()
     {
         return $this->categories->first();
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function categories(): BelongsToMany
@@ -48,11 +65,22 @@ class Celebrity extends Model implements HasMedia
 
     public function getImagesAttribute()
     {
-        return $this->getMedia('celebrity-images')->map(fn($image) => $image->getUrl());
+        $celebrityImages = $this->getMedia('celebrity-images');
+
+        if ($celebrityImages->count() > 0) {
+            return $celebrityImages->map(fn($image) => $image->getUrl());
+        }
+
+        return [self::PLACEHOLDER_IMAGE_URL];
     }
 
     public function getImageAttribute()
     {
-        return $this->getMedia('celebrity-featured-image')->first()->getUrl();
+        $featuredImage = $this->getMedia('celebrity-featured-image')->first();
+        if ($featuredImage) {
+            return $featuredImage->getUrl();
+        }
+
+        return self::PLACEHOLDER_IMAGE_URL;
     }
 }

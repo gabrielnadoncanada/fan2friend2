@@ -15,14 +15,8 @@ class Category extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-    /**
-     * @var string
-     */
-    protected $table = 'categories';
+    const PLACEHOLDER_IMAGE_URL = 'https://demofilament.test/placeholder.png';
 
-    /**
-     * @var array<string, string>
-     */
     protected $casts = [
         'is_visible' => 'boolean',
     ];
@@ -40,6 +34,11 @@ class Category extends Model implements HasMedia
 
     public function getImageAttribute()
     {
-        return $this->getMedia('category-featured-image')->first()->getUrl();
+        $featuredImage = $this->getMedia('category-featured-image')->first();
+        if ($featuredImage) {
+            return $featuredImage->getUrl();
+        }
+
+        return self::PLACEHOLDER_IMAGE_URL;
     }
 }

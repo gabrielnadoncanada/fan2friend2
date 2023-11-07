@@ -10,8 +10,6 @@ class Payment extends Model
 {
     use HasFactory;
 
-    protected $table = 'payments';
-
     protected $guarded = [];
 
     public function order(): BelongsTo

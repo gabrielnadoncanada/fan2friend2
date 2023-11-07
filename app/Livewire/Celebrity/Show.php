@@ -9,68 +9,100 @@ use Livewire\Component;
 class Show extends Component
 {
     public Celebrity $celebrity;
-    public $currentDate;
-    public $events = [];
-    public $months = [];
-    public $daysOfWeek = [];
+    public Carbon $currentDate;
+    public int $startOfWeek;
     public int $daysInMonth;
+    public array $scheduleRules;
+    public int $currentSelectedScheduleRuleIndex = 0;
+    public int $currentSelectedVariationIndex = 0;
 
-    public function mount()
+    public function mount(): void
     {
         $this->currentDate = now();
-//        $this->months = $this->getMonths();
-        $this->daysOfWeek = $this->getDaysOfWeek();
+        $this->updateMonthData();
+        $this->fetchMonthScheduleRules();
+    }
+
+    private function updateMonthData(): void
+    {
+        $this->startOfWeek = $this->currentDate->copy()->firstOfMonth()->dayOfWeek;
         $this->daysInMonth = $this->currentDate->daysInMonth;
     }
 
-//    public function loadEvents()
-//    {
-//        $eventsFromDb = Celebrity::whereYear('event_date', $this->currentDate->year)
-//            ->whereMonth('event_date', $this->currentDate->month)
-//            ->get();
-//
-//        $this->events = [];
-//        foreach ($eventsFromDb as $event) {
-//            $day = Carbon::parse($event->event_date)->day;
-//            $this->events[$day][] = $event;
-//        }
-//    }
-//
-//    public function nextMonth()
-//    {
-//        $this->currentDate->addMonth();
-//        $this->daysInMonth = $this->getDaysInMonth();
-//    }
-//
-//    public function prevMonth()
-//    {
-//        $this->currentDate->subMonth();
-//        $this->daysInMonth = $this->getDaysInMonth();
-//    }
-//
-//    private function getMonths()
-//    {
-//        return array_map(function ($monthNumber) {
-//            return __('app.date.months.' . $monthNumber);
-//        }, range(1, 12));
-//    }
-//
-    private function getDaysOfWeek()
+    public function moveMonth(int $direction): void
     {
-        return array_map(function ($dayNumber) {
-            return __('app.date.daysOfWeek.' . $dayNumber);
-        }, range(1, 7));
+        $this->currentDate->firstOfMonth();
+        $this->currentDate = ($direction === 1) ? $this->currentDate->addMonth() : $this->currentDate->subMonth();
+        $this->updateMonthData();
+        $this->fetchMonthScheduleRules();
     }
-//
-//    private function getDaysInMonth()
-//    {
-//        return $this->currentDate->daysInMonth;
-//    }
+
+    public function nextMonth(): void
+    {
+        $this->moveMonth(1);
+    }
+
+    public function prevMonth(): void
+    {
+        $this->moveMonth(-1);
+    }
+
+    public function setCurrentDay($day): void
+    {
+        $this->currentDate->day = $day;
+    }
+
+    private function loadScheduleRules($scheduleRules)
+    {
+
+    }
+
+    public function fetchMonthScheduleRules()
+    {
+
+        $weeklySchedule = $this->celebrity->scheduleRules;
+        $monthSchedule = [];
+        $monthScheduleOveridedDates = [];
+
+        foreach ($weeklySchedule as $schedule) {
+            if ($schedule['type'] === 'Date' && isset($schedule['date'])) {
+                $monthScheduleOveridedDates[] = $schedule;
+            } else {
+                $monthSchedule[$schedule['wday']] = $schedule['timeIntervals'];
+            }
+        }
+
+        $monthScheduleParsed = [];
+
+        for ($day = 1; $day <= $this->daysInMonth; $day++) {
+            $weekday = ($day + $this->startOfWeek - 2) % 7 + 1;
+            $scheduleForDay = $monthSchedule[$weekday];
+            $monthScheduleParsed[$day] = $scheduleForDay;
+        }
+
+        foreach ($monthScheduleOveridedDates as $overriddenSchedule) {
+            $date = Carbon::parse($overriddenSchedule['date']);
+
+            if ($date->month == $this->currentDate->month && $date->year == $this->currentDate->year) {
+                $monthScheduleParsed[$date->day] = $overriddenSchedule['timeIntervals'];
+
+            }
+        }
+        $this->scheduleRules = $monthScheduleParsed;
+    }
+
+    public function addToCart(){
+        $this->validate([
+            'currentSelectedScheduleRuleIndex' => 'required',
+            'currentSelectedVariationIndex' => 'required',
+        ]);
+
+
+    }
 
     public function render()
     {
         return view('livewire.celebrity.show');
     }
 }
-
 

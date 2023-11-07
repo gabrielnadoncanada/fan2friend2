@@ -16,13 +16,11 @@ return new class() extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('email')->unique();
-            $table->string('photo')->nullable();
-            $table->enum('gender', ['male', 'female']);
             $table->string('phone')->nullable();
             $table->date('birthday')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -2,21 +2,21 @@
 
 namespace Database\Factories;
 
-use App\Models\OrderItem;
+use App\Models\Celebrity;
+use App\Models\Order;
+use App\Models\Service;
+use App\Models\TimeSlot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderItemFactory extends Factory
 {
-    /**
-     * @var string
-     */
-    protected $model = OrderItem::class;
-
     public function definition(): array
     {
         return [
-            'qty' => $this->faker->numberBetween(1, 10),
-            'unit_price' => $this->faker->randomFloat(2, 100, 500),
+            'order_id' => Order::factory(),
+            'service_id' => Service::factory(),
+            'time_slot_id' => TimeSlot::factory(),
+            'celebrity_id' => Celebrity::factory(),
         ];
     }
 }

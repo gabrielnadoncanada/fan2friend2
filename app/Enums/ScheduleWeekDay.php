@@ -4,15 +4,15 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum ScheduleWeekDay: string implements HasLabel
+enum ScheduleWeekDay: int implements HasLabel
 {
-    case Sunday = 'Sunday';
-    case Monday = 'Monday';
-    case Tuesday = 'Tuesday';
-    case Wednesday = 'Wednesday';
-    case Thursday = 'Thursday';
-    case Friday = 'Friday';
-    case Saturday = 'Saturday';
+    case Sunday = 1;
+    case Monday = 2;
+    case Tuesday = 3;
+    case Wednesday = 4;
+    case Thursday = 5;
+    case Friday = 6;
+    case Saturday = 7;
 
     public function getLabel(): ?string
     {

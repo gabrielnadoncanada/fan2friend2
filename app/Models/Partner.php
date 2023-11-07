@@ -12,14 +12,6 @@ class Partner extends Model implements HasMedia
     use HasFactory;
     use InteractsWithMedia;
 
-    /**
-     * @var string
-     */
-    protected $table = 'partners';
-
-    /**
-     * @var array<string, string>
-     */
     protected $casts = [
         'is_visible' => 'boolean',
     ];

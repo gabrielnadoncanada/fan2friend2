@@ -34,15 +34,7 @@ class LatestOrders extends BaseWidget
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
-                Tables\Columns\TextColumn::make('currency')
-                    ->getStateUsing(fn ($record): ?string => Currency::find($record->currency)?->name ?? null)
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('total_price')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('shipping_price')
-                    ->label('Shipping cost')
+                Tables\Columns\TextColumn::make('total')
                     ->searchable()
                     ->sortable(),
             ])

@@ -55,62 +55,108 @@
                         </p>
                     </div>
 
-                    <livewire:celebrity.schedule></livewire:celebrity.schedule>
-                    <div class="px-[24px] pt-[22px] pb-[18px] border border-[#D6D6D6] rounded-bl-[10px] rounded-br-[10px]">
-
-
-                        <div class="flex items-center justify-between gap-x-2">
-                            <button wire:click="prevMonth" class="ml-auto px-4 py-2  ">&lt;</button>
-                            <span class="text-lg font-semibold">{{ $currentDate->localeMonth }} {{ $currentDate->year }}</span>
-                            <button wire:click="nextMonth" class="mr-auto px-4 py-2">&gt;</button>
-                        </div>
-
-                        <div class="grid grid-cols-7 gap-4 mt-4 gradient-to-98 text-white h-[36px] items-center">
-                            @foreach($daysOfWeek as $day)
-                                <div class="text-center font-semibold">{{ __($day) }}</div>
-                            @endforeach
-                        </div>
-
-                        <div class="grid grid-cols-7 gap-4 mt-4">
-                            @for($i = 1; $i < $daysInMonth; $i++)
-
-                                <div class="text-center flex items-center justify-center">
-                                    <button @click="$wire.set('currentDate', {{$currentDate->setDay($i)}})"
-                                        @class([
-                                            'w-full rounded-[10px]',
-                                            'gradient-to-98 text-white' => $i === $currentDate->day,
-                                        ])>
-                                        {{ $i }}
-                                    </button>
-
-
-                                    {{--                @foreach($dayInfo['events'] as $event)--}}
-                                    {{--                    <div class="mt-1 text-xs bg-green-200 p-1 rounded">{{ $event }}</div>--}}
-                                    {{--                @endforeach--}}
+                    <table
+                        class="table-fixed border-spacing-0 w-full px-[24px] pb-[18px]  text-center border border-[#D6D6D6] rounded-bl-[10px] rounded-br-[10px] border-separate">
+                        <thead>
+                        <tr>
+                            <th colspan="7" class="text-center">
+                                <div class="py-3">
+                                    <button wire:click="prevMonth" class="ml-auto px-4 ">&lt;</button>
+                                    <span
+                                        class="text-lg font-semibold">{{ $currentDate->localeMonth }} {{ $currentDate->year }}</span>
+                                    <button wire:click="nextMonth" class="mr-auto px-4 ">&gt;</button>
                                 </div>
+
+                            </th>
+                        </tr>
+                        <tr class="h-[36px] gradient-to-98 text-white">
+                            @for ($i = 1; $i <= 7; $i++)
+                                <th class="p-2">{{ __('app.date.daysOfWeek.'.$i) }}</th>
                             @endfor
-                        </div>
-                    </div>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @php
+                            $currentDay = 1 - $startOfWeek;  // Adjust based on starting day of the week
+                        @endphp
+
+                        @for ($i = 0; $i < ceil(($daysInMonth + $startOfWeek) / 7); $i++)
+                            <!-- calculate the number of weeks in month -->
+                            <tr class="h-[36px]">
+                                @for ($j = 0; $j < 7; $j++)
+                                    <td class="p-2">
+
+                                        @if ($currentDay > 0 && $currentDay <= $daysInMonth)
+                                            @empty($scheduleRules[$currentDay])
+                                                {{ $currentDay }}
+                                            @else
+                                                <button wire:click="setCurrentDay({{$currentDay}})"
+                                                    @class([
+                                                        'w-full rounded-[10px] bg-[#F7F7F7]',
+                                                        'gradient-to-98 text-white' => $currentDay === $currentDate->day,
+                                                    ])>
+                                                    {{ $currentDay }}
+                                                </button>
+                                            @endempty
+                                        @endif
+                                        @php
+                                            $currentDay++;
+                                        @endphp
+                                    </td>
+                                @endfor
+                            </tr>
+                        @endfor
+                        </tbody>
+                    </table>
 
 
+{{--                    <form wire:submit="addToCart">--}}
+{{--                        <div class="grid grid-cols-12 my-[30px] justify-between ">--}}
+{{--                            <p class="col-[1/4] whitespace-nowrap leading-[36px]">--}}
+{{--                                Plages disponibles:--}}
+{{--                            </p>--}}
 
+{{--                            <div class="col-[5/13] grid grid-cols-3 gap-2 ">--}}
+{{--                                @foreach($scheduleRules[$currentDate->day] as $key => $scheduleRule)--}}
+{{--                                    <div>--}}
+{{--                                        <input id="schedule_rule_{{$key}}" type="radio" name="schedule_rule"--}}
+{{--                                               wire:model="schedule_rule_{{$key}}" class="peer hidden" checked/>--}}
+{{--                                        <label for="schedule_rule_{{$key}}"--}}
+{{--                                               class="block cursor-pointer select-none  py-[8px] px-[12px] text-center border font-bold  text-[13px]">--}}
+{{--                                            {!!  $scheduleRule['from'] . '&nbsp;-&nbsp;' .$scheduleRule['to']!!}--}}
+{{--                                        </label>--}}
+{{--                                    </div>--}}
+{{--                                @endforeach--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
+{{--                        <div class="grid grid-cols-12 my-[30px] justify-between ">--}}
+{{--                            <p class="col-[1/4] whitespace-nowrap leading-[36px]">--}}
+{{--                                Durée:--}}
+{{--                            </p>--}}
 
+{{--                            <div class="col-[5/13] grid grid-cols-3 gap-2 ">--}}
+{{--                                @foreach($celebrity->variations as $key => $variation)--}}
+{{--                                    <div>--}}
+{{--                                        <x-form.input type="radio" name="service" id="service_{{$key}}"--}}
+{{--                                                      class="peer hidden"--}}
+{{--                                                      checked--}}
+{{--                                        />--}}
+{{--                                        <x-form.label--}}
+{{--                                            class="block cursor-pointer select-none  py-[8px] px-[12px] text-center border font-bold  text-[13px]"--}}
+{{--                                            for="currentSelectedVariationIndex">--}}
+{{--                                            {!!  $variation['duration']!!}--}}
+{{--                                        </x-form.label>--}}
 
-
-                    <div class="flex gap-x-[18px] my-[30px] justify-between items-center">
-                        <p>
-                            Plages disponibles:
-                        </p>
-                        <ul class="flex gap-x-[7px]">
-                            <li><p class="gradient-to-98 text-[13px] text-white font-bold py-[8px] px-[12px]">18h00&nbsp;-&nbsp;18h30</p>
-                            </li>
-                            <li><p class="font-bold text-[13px] py-[8px] px-[12px]">18h30&nbsp;-&nbsp;19h00</p></li>
-                            <li><p class="font-bold text-[13px] py-[8px] px-[12px]">19h00&nbsp;-&nbsp;19h30</p></li>
-                        </ul>
-                    </div>
-                    <x-button theme="gradient" class=" text-white block w-full">Réserver mon moment ─ <span
-                            class="pl-[5px] font-bold">65$</span></x-button>
+{{--                                    </div>--}}
+{{--                                @endforeach--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <x-button theme="gradient" type="submit" class=" text-white block w-full">Réserver mon moment ─--}}
+{{--                            <span--}}
+{{--                                class="pl-[5px] font-bold">${{$celebrity->variations[$currentSelectedVariationIndex]['price']}}</span>--}}
+{{--                        </x-button>--}}
+{{--                    </form>--}}
                 </div>
             </div>
         </div>

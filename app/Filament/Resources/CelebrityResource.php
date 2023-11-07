@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Enums\ScheduleType;
+use App\Enums\ScheduleRuleType;
 use App\Enums\ScheduleWeekDay;
 use App\Filament\Resources\CelebrityResource\Pages\CreateCelebrity;
 use App\Filament\Resources\CelebrityResource\Pages\EditCelebrity;
@@ -44,7 +44,7 @@ class CelebrityResource extends Resource
         $defaultDays = [];
         foreach (ScheduleWeekDay::values() as $day) {
             $defaultDays[] = [
-                'type' => ScheduleType::Day->value,
+                'type' => ScheduleRuleType::Day->value,
                 'wday' => $day,
                 'timeIntervals' => [
                     [
@@ -93,11 +93,14 @@ class CelebrityResource extends Resource
                             ])
                             ->collapsible(),
 
-                        Forms\Components\Section::make('Variations')
+                        Forms\Components\Section::make('Services')
                             ->schema([
-                                Forms\Components\Repeater::make('variations')
-                                    ->label('variations')
+                                Forms\Components\Repeater::make('services')
+                                    ->label('services')
+                                    ->relationship('services')
                                     ->schema([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required(),
                                         Forms\Components\TextInput::make('duration')
                                             ->required(),
                                         Forms\Components\TextInput::make('price')
@@ -105,43 +108,47 @@ class CelebrityResource extends Resource
                                     ])
                             ])
                             ->collapsible(),
-                        Forms\Components\Section::make('Schedules')
+                        Forms\Components\Section::make('weeklySchedules')
                             ->schema([
-                                Forms\Components\Repeater::make('schedules')
-                                    ->label('schedules')
+                                Forms\Components\Repeater::make('weeklySchedules')
+                                    ->label('weeklySchedules')
+                                    ->relationship('weeklySchedules')
                                     ->schema([
-                                        Forms\Components\Grid::make(2)->schema([
-                                            Forms\Components\Select::make('type')
-                                                ->options(ScheduleType::class)
-                                                ->default(ScheduleType::Day->value)
-                                                ->live()->required()
-                                                ->afterStateUpdated(fn(Select $component) => $component
-                                                    ->getContainer()
-                                                    ->getComponent('dynamicTypeFields')
-                                                    ->getChildComponentContainer()
-                                                    ->fill())->columnSpan(1),
-                                            Forms\Components\Group::make()
-                                                ->schema(fn(Get $get): array => match ($get('type')) {
-                                                    ScheduleType::Day->value => [
-                                                        Forms\Components\Select::make('wday')
-                                                            ->options(ScheduleWeekDay::class)
-                                                            ->required(),
-                                                    ],
-                                                    ScheduleType::Date->value => [
-                                                        Forms\Components\Datepicker::make('date')
-                                                    ],
-                                                    default => [],
-                                                })
-                                                ->key('dynamicTypeFields')->columnSpan(1),
-                                        ]),
-                                        Forms\Components\Repeater::make('timeIntervals')
-                                            ->label('timeIntervals')
+                                        Forms\Components\Select::make('day_of_week')
+                                            ->options(ScheduleWeekDay::class)
+                                            ->required(),
+                                        Forms\Components\Repeater::make('timeSlots')
+                                            ->label('timeSlots')
+                                            ->relationship('timeSlots')
                                             ->schema([
-                                                Forms\Components\TimePicker::make('from')
-                                                    ->required()->default('10:00'),
-                                                Forms\Components\TimePicker::make('to')
-                                                    ->required()->default('12:00')
-                                            ])->defaultItems(0)->columns(2)
+                                                Forms\Components\TimePicker::make('start_time')
+                                                    ->required(),
+                                                Forms\Components\TimePicker::make('end_time')
+                                                    ->required(),
+                                            ])
+                                    ])->columnSpanFull()
+                                    ->default(
+                                        fn() => $defaultDays
+                                    )
+                            ])
+                            ->columns(2),
+                        Forms\Components\Section::make('overrideDates')
+                            ->schema([
+                                Forms\Components\Repeater::make('overrideDates')
+                                    ->label('overrideDates')
+                                    ->relationship('overrideDates')
+                                    ->schema([
+                                        Forms\Components\DatePicker::make('date')
+                                            ->required(),
+                                        Forms\Components\Repeater::make('timeSlots')
+                                            ->label('timeSlots')
+                                            ->relationship('timeSlots')
+                                            ->schema([
+                                                Forms\Components\TimePicker::make('start_time')
+                                                    ->required(),
+                                                Forms\Components\TimePicker::make('end_time')
+                                                    ->required(),
+                                            ])
                                     ])->columnSpanFull()
                                     ->default(
                                         fn() => $defaultDays
@@ -230,7 +237,7 @@ class CelebrityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CommentsRelationManager::class,
+
         ];
     }
 

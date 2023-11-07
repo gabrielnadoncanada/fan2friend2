@@ -11,11 +11,6 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\UnreachableUrl;
 
 class CategoryFactory extends Factory
 {
-    /**
-     * @var string
-     */
-    protected $model = Category::class;
-
     public function definition(): array
     {
         return [

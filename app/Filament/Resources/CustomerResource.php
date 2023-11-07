@@ -90,9 +90,6 @@ class CustomerResource extends Resource
                     ->searchable()
                     ->sortable(),
             ])
-            ->filters([
-                Tables\Filters\TrashedFilter::make(),
-            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
             ])

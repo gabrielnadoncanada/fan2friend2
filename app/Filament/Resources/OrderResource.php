@@ -3,6 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Enums\OrderStatus;
+use App\Filament\Resources\OrderResource\Pages\CreateOrder;
+use App\Filament\Resources\OrderResource\Pages\EditOrder;
+use App\Filament\Resources\OrderResource\Pages\ListOrders;
 use App\Filament\Resources\OrderResource\RelationManagers\PaymentsRelationManager;
 use App\Filament\Resources\OrderResource\Widgets\OrderStats;
 use App\Forms\Components\AddressForm;
@@ -18,13 +21,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Carbon;
-use Squire\Models\Currency;
 
 class OrderResource extends Resource
 {
     protected static ?string $model = Order::class;
-
-    protected static ?string $slug = 'shop/orders';
 
     protected static ?string $recordTitleAttribute = 'number';
 
@@ -45,22 +45,22 @@ class OrderResource extends Resource
                             ->columns(2),
 
                         Forms\Components\Section::make('Order items')
-                            ->schema(static::getFormSchema('items')),
+                            ->schema(static::getFormSchema('items'))
                     ])
-                    ->columnSpan(['lg' => fn (?Order $record) => $record === null ? 3 : 2]),
+                    ->columnSpan(['lg' => fn(?Order $record) => $record === null ? 3 : 2]),
 
                 Forms\Components\Section::make()
                     ->schema([
                         Forms\Components\Placeholder::make('created_at')
                             ->label('Created at')
-                            ->content(fn (Order $record): ?string => $record->created_at?->diffForHumans()),
+                            ->content(fn(Order $record): ?string => $record->created_at?->diffForHumans()),
 
                         Forms\Components\Placeholder::make('updated_at')
                             ->label('Last modified at')
-                            ->content(fn (Order $record): ?string => $record->updated_at?->diffForHumans()),
+                            ->content(fn(Order $record): ?string => $record->updated_at?->diffForHumans()),
                     ])
                     ->columnSpan(['lg' => 1])
-                    ->hidden(fn (?Order $record) => $record === null),
+                    ->hidden(fn(?Order $record) => $record === null),
             ])
             ->columns(3);
     }
@@ -78,23 +78,9 @@ class OrderResource extends Resource
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
-                Tables\Columns\TextColumn::make('currency')
-                    ->getStateUsing(fn ($record): ?string => Currency::find($record->currency)?->name ?? null)
+                Tables\Columns\TextColumn::make('total')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('total_price')
-                    ->searchable()
-                    ->sortable()
-                    ->summarize([
-                        Tables\Columns\Summarizers\Sum::make()
-                            ->money(),
-                    ]),
-                Tables\Columns\TextColumn::make('shipping_price')
-                    ->label('Shipping cost')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable()
                     ->summarize([
                         Tables\Columns\Summarizers\Sum::make()
                             ->money(),
@@ -105,24 +91,23 @@ class OrderResource extends Resource
                     ->toggleable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
 
                 Tables\Filters\Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('created_from')
-                            ->placeholder(fn ($state): string => 'Dec 18, ' . now()->subYear()->format('Y')),
+                            ->placeholder(fn($state): string => 'Dec 18, ' . now()->subYear()->format('Y')),
                         Forms\Components\DatePicker::make('created_until')
-                            ->placeholder(fn ($state): string => now()->format('M d, Y')),
+                            ->placeholder(fn($state): string => now()->format('M d, Y')),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
                                 $data['created_from'] ?? null,
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['created_until'] ?? null,
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     })
                     ->indicateUsing(function (array $data): array {
@@ -174,9 +159,9 @@ class OrderResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => \App\Filament\Resources\OrderResource\Pages\ListOrders::route('/'),
-            'create' => \App\Filament\Resources\OrderResource\Pages\CreateOrder::route('/create'),
-            'edit' => \App\Filament\Resources\OrderResource\Pages\EditOrder::route('/{record}/edit'),
+            'index' => ListOrders::route('/'),
+            'create' => CreateOrder::route('/create'),
+            'edit' => EditOrder::route('/{record}/edit'),
         ];
     }
 
@@ -213,40 +198,34 @@ class OrderResource extends Resource
     {
         if ($section === 'items') {
             return [
-                Forms\Components\Repeater::make('items')
+                Forms\Components\Repeater::make('orderItems')
                     ->relationship()
                     ->schema([
-                        Forms\Components\Select::make('celebrity_id')
-                            ->label('Celebrity')
-                            ->options(Celebrity::query()->pluck('name', 'id'))
+                        Forms\Components\TextInput::make('celebrity_id')
+                            ->label('celebrity id')
+
                             ->required()
                             ->reactive()
-                            ->afterStateUpdated(fn ($state, Forms\Set $set) => $set('unit_price', Celebrity::find($state)?->price ?? 0))
                             ->columnSpan([
-                                'md' => 5,
-                            ])
-                            ->searchable(),
-
-                        Forms\Components\TextInput::make('qty')
-                            ->label('Quantity')
-                            ->numeric()
-                            ->default(1)
-                            ->columnSpan([
-                                'md' => 2,
-                            ])
-                            ->required(),
-
-                        Forms\Components\TextInput::make('unit_price')
-                            ->label('Unit Price')
-                            ->disabled()
-                            ->dehydrated()
-                            ->numeric()
+                                'md' => 4,
+                            ]),
+                        Forms\Components\TextInput::make('service_id')
+                            ->label('Service id')
                             ->required()
+                            ->reactive()
                             ->columnSpan([
                                 'md' => 3,
                             ]),
+                        Forms\Components\TextInput::make('time_slot_id')
+                            ->label('TimeSlot id')
+                            ->required()
+                            ->reactive()
+                            ->columnSpan([
+                                'md' => 3,
+                            ]),
+
                     ])
-                    ->orderable()
+
                     ->defaultItems(1)
                     ->disableLabel()
                     ->columns([
@@ -299,12 +278,6 @@ class OrderResource extends Resource
                 ->options(OrderStatus::class)
                 ->required()
                 ->native(false),
-
-            Forms\Components\Select::make('currency')
-                ->searchable()
-                ->getSearchResultsUsing(fn (string $query) => Currency::where('name', 'like', "%{$query}%")->pluck('name', 'id'))
-                ->getOptionLabelUsing(fn ($value): ?string => Currency::find($value)?->getAttribute('name'))
-                ->required(),
 
             AddressForm::make('address')
                 ->columnSpan('full'),

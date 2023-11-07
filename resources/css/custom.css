@@ -6,6 +6,10 @@
     @apply text-[15px] px-[30px] font-bold py-[22px] rounded-[300px] leading-[0];
 }
 
+input[type="radio"]:checked, input[type="radio"]:checked ~ label {
+    @apply gradient-to-98  text-white;
+}
+
 .text-gradient {
     @apply gradient-to-98;
     -webkit-background-clip: text;

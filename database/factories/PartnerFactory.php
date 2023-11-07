@@ -8,11 +8,6 @@ use Illuminate\Support\Str;
 
 class PartnerFactory extends Factory
 {
-    /**
-     * @var string
-     */
-    protected $model = Partner::class;
-
     public function definition(): array
     {
         return [

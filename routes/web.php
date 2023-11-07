@@ -5,6 +5,7 @@ use App\Livewire\Form;
 use App\Livewire\Cart;
 use App\Livewire\Home;
 use App\Livewire\Celebrity;
+use App\Livewire\WaitingRoomComponent;
 use Illuminate\Support\Facades\Route;
 Route::get('form', Form::class);
 
@@ -17,4 +18,9 @@ Route::get('/panier', Cart::class)->name('cart');
 Route::post('/book', [BookingController::class, 'book']);
 Route::get('/booking', [BookingController::class, 'show']);
 Route::post('/refund', [BookingController::class, 'refund']);
+
+
+
+Route::get('/waiting-room', WaitingRoomComponent::class)->name('waiting-room');
+
 

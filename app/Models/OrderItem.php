@@ -9,8 +9,18 @@ class OrderItem extends Model
 {
     use HasFactory;
 
-    /**
-     * @var string
-     */
-    protected $table = 'order_items';
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function timeSlot()
+    {
+        return $this->belongsTo(TimeSlot::class);
+    }
 }
