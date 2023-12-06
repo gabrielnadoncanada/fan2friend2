@@ -21,6 +21,6 @@ class Form extends Component
 
     public function render()
     {
-	    return view('components.form');
+        return view('components.form');
     }
 }

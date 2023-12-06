@@ -1,88 +1,116 @@
 <?php
 
-// App/Services/BookingService.php
-
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\Order;
+use App\Enums\OrderStatus;
+use App\Models\Celebrity;
 use App\Models\OrderItem;
-use App\Models\WaitingRoom;
-use App\Models\Service;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Exception;
+use Illuminate\Support\Facades\Log;
 
 class BookingService
 {
-    /**
-     * Book a service for a user.
-     *
-     * @param User $user
-     * @param int $serviceId
-     * @param array $bookingDetails
-     * @return Order
-     */
-    public function bookService(User $user, int $serviceId, array $bookingDetails): Order
+    public function fetchAvailabilitiesWithExclusions(Celebrity $celebrity): array
     {
-        // Start a transaction to ensure data consistency
-        return DB::transaction(function () use ($user, $serviceId, $bookingDetails) {
-            // Check if the user is already in a waiting room
-            if ($this->isUserAlreadyWaiting($user)) {
-                throw new Exception("User is already in a waiting room.");
-            }
+        $cacheKey = "celebrity.{$celebrity->id}.availabilities";
 
-            // Find the service being booked
-            $service = Service::findOrFail($serviceId);
+//        if (Cache::has($cacheKey)) {
+//            return Cache::get($cacheKey);
+//        }
 
-            // Create a new order
-            $order = Order::create([
-                'user_id' => $user->id,
-                'status' => 'pending', // Or any other initial status
-                // Add other order details from $bookingDetails if necessary
-            ]);
+        $celebrity = $this->loadCelebritySchedule($celebrity);
+        $exceptionsByWeekday = $this->mapExceptionsByWeekday($celebrity->scheduleRuleExceptions);
+        $rrule = collect();
 
-            // Create an order item
-            $orderItem = OrderItem::create([
-                'order_id' => $order->id,
-                'service_id' => $service->id,
-                'price' => $service->price,
-                // Add other fields such as quantity, etc.
-            ]);
+        foreach ($celebrity->scheduleRules as $scheduleRule) {
+            $weekday = $scheduleRule->wday->getShortLabel();
+            $exdates = $exceptionsByWeekday[$weekday] ?? [];
 
-            // Add user to the waiting room
-            $this->addToWaitingRoom($user, $orderItem);
+            $rrule->push($this->getFormattedRrule($scheduleRule, $exdates, $celebrity->start_date, $celebrity->end_date));
+        }
 
-            return $order;
-        });
+        foreach ($celebrity->scheduleRuleExceptions as $exception) {
+            $rrule->push($this->getFormattedRrule($exception, [], $exception->date, $exception->date));
+        }
+
+        $rrule = $rrule->collapse();
+
+        Cache::put($cacheKey, $rrule->all(), 60 * 60 * 24);
+
+        return $rrule->all();
     }
 
-    /**
-     * Add a user to a waiting room.
-     *
-     * @param User $user
-     * @param OrderItem $orderItem
-     * @return WaitingRoom
-     */
-    protected function addToWaitingRoom(User $user, OrderItem $orderItem): WaitingRoom
+    private function loadCelebritySchedule(Celebrity $celebrity): Celebrity
     {
-
-        return WaitingRoom::create([
-            'order_item_id' => $orderItem->id,
-            'status' => 'waiting',
-            'entered_at' => now(),
+        return $celebrity->load([
+            'scheduleRules.intervals:id,start_time,end_time',
+            'scheduleRuleExceptions.intervals:id,start_time,end_time',
+            'orderItems' => function ($query) use ($celebrity) {
+                $query->select('id', 'scheduled_date')
+                    ->whereIn('scheduled_date', [
+                        $celebrity->start_date,
+                        $celebrity->end_date,
+                    ]);
+            },
         ]);
     }
 
-    /**
-     * Check if the user is already in a waiting room.
-     *
-     * @param User $user
-     * @return bool
-     */
-    protected function isUserAlreadyWaiting(User $user): bool
+    private function mapExceptionsByWeekday($exceptions): array
     {
-        return WaitingRoom::whereHas('orderItem', function ($query) use ($user) {
-            $query->where('user_id', $user->id)->whereIn('status', ['waiting', 'in_session']);
-        })->exists();
+        return $exceptions->groupBy(function ($exception) {
+            return $exception->wday->getShortLabel();
+        })->map(function ($grouped) {
+            return $grouped->pluck('date')->all();
+        })->all();
+    }
+
+    private function getFormattedRrule($scheduleRule, $exdates, $start_date, $end_date): array
+    {
+        $rrule = [];
+
+        foreach ($scheduleRule->intervals as $interval) {
+            $rrule[] = $this->formatRrule($scheduleRule, $interval, $exdates, $start_date, $end_date);
+        }
+
+        return $rrule;
+    }
+
+    private function formatRrule($scheduleRule, $interval, $exdates, $start_date, $end_date): array
+    {
+        return [
+            'rrule' => [
+                'freq' => 'weekly',
+                'byweekday' => $scheduleRule->wday->getShortLabel(),
+                'dtstart' => $start_date,
+                'until' => $end_date,
+            ],
+            'start_time' => $interval->start_time,
+            'end_time' => $interval->end_time,
+            'exdate' => $exdates,
+            'interval_id' => $interval->id,
+        ];
+    }
+
+    public function isIntervalAvailable(Celebrity $celebrity, string $selectedDate, int $intervalId)
+    {
+        $interval = DB::table('intervals')->find($intervalId);
+
+        if (!$interval) {
+            throw new \Exception('Interval not found');
+        }
+
+        $usedMinutes = DB::table('order_items')
+            ->where('scheduled_date', $selectedDate)
+            ->where('status', OrderStatus::PAID)
+            ->whereTime('start_time', '>=', $interval->start_time)
+            ->whereTime('end_time', '<=', $interval->end_time)
+            ->sum(DB::raw('TIMESTAMPDIFF(MINUTE, start_time, end_time) + ' . $celebrity->before_buffer_time . ' + ' . $celebrity->after_buffer_time));
+
+
+
+        return $interval->total_available_minutes - (int)$usedMinutes >= ($celebrity->spot_step + $celebrity->before_buffer_time + $celebrity->after_buffer_time);
     }
 }

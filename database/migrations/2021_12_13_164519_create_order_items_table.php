@@ -15,10 +15,21 @@ return new class() extends Migration
     {
         Schema::create('order_items', function (Blueprint $table) {
             $table->id();
+            $table->decimal('unit_price', 12);
+            $table->decimal('total_price', 12);
+            $table->foreignId('celebrity_id')->constrained();
+            $table->time('start_time');
+            $table->integer('duration');
+            $table->integer('quantity');
+            $table->date('scheduled_date');
+            $table->string('wday')->virtualAs(
+                "DATE_FORMAT(scheduled_date, '%W')"
+            );
+            $table->time('end_time')->virtualAs(
+                "ADDTIME(start_time, SEC_TO_TIME(duration * quantity * 60))"
+            );
+            $table->string('status')->default('pending');
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
-            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->foreignId('time_slot_id')->constrained('time_slots')->onDelete('cascade');
-            $table->foreignId('celebrity_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

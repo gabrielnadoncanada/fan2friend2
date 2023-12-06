@@ -2,18 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\CanadianProvince;
 use App\Enums\OrderStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Order extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'number',
         'status',
@@ -22,16 +21,13 @@ class Order extends Model
 
     protected $casts = [
         'status' => OrderStatus::class,
+        'state' => CanadianProvince::class
+
     ];
 
-    public function address(): MorphOne
+    public function user()
     {
-        return $this->morphOne(OrderAddress::class, 'addressable');
-    }
-
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(User::class);
     }
 
     public function orderItems()
@@ -42,5 +38,25 @@ class Order extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->orderItems->sum('price');
+    }
+
+    protected static function booted()
+    {
+        static::deleted(function ($order) {
+            Cache::forget("celebrity.{$order->celebrity_id}.availabilities");
+        });
+
+        static::updated(function ($order) {
+            Cache::forget("celebrity.{$order->celebrity_id}.availabilities");
+        });
+
+        static::created(function ($order) {
+            Cache::forget("celebrity.{$order->celebrity_id}.availabilities");
+        });
     }
 }

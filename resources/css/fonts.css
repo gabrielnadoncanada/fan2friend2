@@ -54,12 +54,6 @@
     font-style: normal;
 }
 
-@font-face {
-    font-family: 'Larsseit';
-    src: url('/public/Larsseit-MediumItalic.otf') format('opentype');
-    font-weight: 500;
-    font-style: italic;
-}
 
 @font-face {
     font-family: 'Larsseit';
@@ -80,4 +74,43 @@
     src: url('/resources/fonts/Larsseit/Larsseit.otf') format('opentype');
     font-weight: normal;
     font-style: normal;
+}
+
+
+/*!
+ * Font Awesome Pro 6.4.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license (Commercial License)
+ * Copyright 2023 Fonticons, Inc.
+ */
+
+@font-face {
+    font-family: "Font Awesome 6 Brands";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("../fonts/font-awesome/fa-brands-400.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Sharp";
+    font-style: normal;
+    font-weight: 300;
+    font-display: block;
+    src: url("../fonts/font-awesome/fa-sharp-light-300.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Sharp";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("../fonts/font-awesome/fa-sharp-regular-400.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: "Font Awesome 6 Sharp";
+    font-style: normal;
+    font-weight: 900;
+    font-display: block;
+    src: url("../fonts/font-awesome/fa-sharp-solid-900.woff2") format("woff2");
 }

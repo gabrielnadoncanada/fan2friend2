@@ -3,3 +3,11 @@
 @import '../../custom.css';
 @config './tailwind.config.js';
 
+
+.fi-btn-color-primary {
+   @apply gradient-to-98;
+}
+
+.fi-simple-header-heading {
+    @apply text-[36px] font-bold text-[#0D0D0D] text-center;
+}

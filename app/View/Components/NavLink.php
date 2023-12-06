@@ -7,23 +7,25 @@ use Illuminate\View\Component;
 
 class NavLink extends Component
 {
-	use Themeable;
-	public $link;
-	public $theme;
+    use Themeable;
 
-	public function __construct($link, $theme = 'default')
-	{
-		$this->link = $link;
-		$this->theme = $this->isActive($link) ? 'active' : $theme;
-	}
+    public $link;
 
-	public function isActive($link): bool
+    public $theme;
+
+    public function __construct($link, $theme = 'default')
     {
-		return request()->url() === $link;
-	}
+        $this->link = $link;
+        $this->theme = $this->isActive($link) ? 'active' : $theme;
+    }
 
-	public function render()
-	{
-		return view('components.nav-link');
-	}
+    public function isActive($link): bool
+    {
+        return request()->url() === $link;
+    }
+
+    public function render()
+    {
+        return view('components.nav-link');
+    }
 }

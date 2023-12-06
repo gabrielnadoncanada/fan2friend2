@@ -15,8 +15,8 @@ class Input extends Control
 
     public function render()
     {
-       
-	    return $this->view('components.form.input');
+
+        return $this->view('components.form.input');
 
     }
 }

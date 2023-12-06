@@ -9,7 +9,6 @@ use App\Models\Partner;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,60 +18,35 @@ class PartnerResource extends Resource
 {
     protected static ?string $model = Partner::class;
 
-    protected static ?string $slug = 'shop/Partners';
-
     protected static ?string $recordTitleAttribute = 'name';
-
-    protected static ?string $navigationGroup = 'Shop';
 
     protected static ?string $navigationIcon = 'heroicon-o-bookmark-square';
 
     protected static ?int $navigationSort = 4;
+
+    protected static ?string $label = 'partenaire';
+
+    protected static ?string $title = 'partenaire';
+
+    protected static ?string $pluralLabel = 'partenaires';
+
+    protected static ?string $pluralModelLabel = 'partenaires';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make()
+                    ->schema(static::getFormSchema())
+                    ->columnSpan(['lg' => 2]),
+                Forms\Components\Section::make('Image à la une')
                     ->schema([
-                        Forms\Components\Grid::make()
-                            ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->required()
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
-                            ]),
-                        Forms\Components\Toggle::make('is_visible')
-                            ->label('Visible to customers.')
-                            ->default(true),
-                    ])
-                    ->columnSpan(['lg' => fn(?Partner $record) => $record === null ? 3 : 2]),
-                Forms\Components\Group::make()
-                    ->schema([
-
-                        Forms\Components\Section::make()
-                            ->schema([
-                                Forms\Components\Placeholder::make('created_at')
-                                    ->label('Created at')
-                                    ->content(fn(Partner $record): ?string => $record->created_at?->diffForHumans()),
-
-                                Forms\Components\Placeholder::make('updated_at')
-                                    ->label('Last modified at')
-                                    ->content(fn(Partner $record): ?string => $record->updated_at?->diffForHumans()),
-                            ])
-                            ->hidden(fn(?Partner $record) => $record === null),
-                        Forms\Components\Section::make('Featured image')
-                            ->schema([
-                                SpatieMediaLibraryFileUpload::make('featured-media')
-                                    ->collection('partner-featured-image')
-                                    ->multiple()
-                                    ->maxFiles(1)
-                                    ->disableLabel(),
-                            ]),
-
-
-                    ])->columnSpan(['lg' => 1])
-
+                        SpatieMediaLibraryFileUpload::make('featured_image')
+                            ->collection('partner-featured-image')
+                            ->label('Image')
+                            ->required()
+                            ->image(),
+                    ])->columnSpan(['lg' => 1]),
             ])
             ->columns(3);
     }
@@ -81,20 +55,17 @@ class PartnerResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Name')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('website')
-                    ->label('Website')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\IconColumn::make('is_visible')
-                    ->label('Visibility')
-                    ->boolean()
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('featured_image')
+                    ->collection('partner-featured-image')
+                    ->label('Image à la une'),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Titre'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Date de création')
+                    ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Updated Date')
+                    ->label('Dernière modification')
                     ->date()
                     ->sortable(),
             ])
@@ -105,23 +76,13 @@ class PartnerResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->groupedBulkActions([
-                Tables\Actions\DeleteBulkAction::make()
-                    ->action(function () {
-                        Notification::make()
-                            ->title('Now, now, don\'t be cheeky, leave some records for others to play with!')
-                            ->warning()
-                            ->send();
-                    }),
-            ])
-            ->defaultSort('sort')
-            ->reorderable('sort');
+                Tables\Actions\DeleteBulkAction::make(),
+            ]);
     }
 
     public static function getRelations(): array
     {
-        return [
-
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -130,6 +91,18 @@ class PartnerResource extends Resource
             'index' => ListPartners::route('/'),
             'create' => CreatePartner::route('/create'),
             'edit' => EditPartner::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getFormSchema(): array
+    {
+        return [
+            Forms\Components\TextInput::make('title')
+                ->label('Titre')
+                ->required()
+                ->live(onBlur: true)
+                ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null)
+                ->columnSpanFull(),
         ];
     }
 }

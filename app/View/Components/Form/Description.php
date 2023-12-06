@@ -2,14 +2,15 @@
 
 namespace App\View\Components\Form;
 
-use Illuminate\View\Component;
 use App\Traits\Themeable;
+use Illuminate\View\Component;
 
 class Description extends Component
 {
     use Themeable;
 
     public $for;
+
     public $value;
 
     public function __construct($for, $value = null, $theme = 'default')
@@ -21,6 +22,6 @@ class Description extends Component
 
     public function render()
     {
-	    return $this->view('components.form.description');
-	}
+        return $this->view('components.form.description');
+    }
 }

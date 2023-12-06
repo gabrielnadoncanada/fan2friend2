@@ -80,8 +80,12 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'fr',
 
+    'available_locales' => [
+        'en',
+        'fr',
+    ],
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -174,10 +178,11 @@ return [
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\Filament\AdminPanelProvider::class,
-        App\Providers\Filament\AppPanelProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
-
+        App\Providers\JitsiServiceProvider::class,
+        App\Providers\FilamentServiceProvider::class
     ],
 
     /*
@@ -232,7 +237,10 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Cart' => App\Facades\Cart::class,
+        'Booking' => App\Facades\Booking::class,
 
     ],
+    'admin_role' => 'Admin',
 
 ];

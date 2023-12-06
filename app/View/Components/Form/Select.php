@@ -7,7 +7,9 @@ use Illuminate\View\AppendableAttributeValue;
 class Select extends Control
 {
     public $options;
+
     public $multiple;
+
     public $placeholder;
 
     public function __construct($name, $id = null, $value = '', $bag = 'default', $disabled = false, $theme = 'default', $options = [], $multiple = false, $placeholder = '')
@@ -27,13 +29,13 @@ class Select extends Control
         $invalidAttributes = [];
         if ($this->invalid) {
             $invalidAttributes['aria-invalid'] = 'true';
-            $invalidAttributes['aria-describedby'] = new AppendableAttributeValue($this->name.'_error');
+            $invalidAttributes['aria-describedby'] = new AppendableAttributeValue($this->name . '_error');
         }
 
-        $multipleClasses = ' '.$this->theme('multiple');
+        $multipleClasses = ' ' . $this->theme('multiple');
 
         return $this->attributes->merge([
-            'class' => $this->theme($this->disabled ? 'disabled' : ($this->invalid ? 'invalid' : 'normal')).$multipleClasses,
+            'class' => $this->theme($this->disabled ? 'disabled' : ($this->invalid ? 'invalid' : 'normal')) . $multipleClasses,
         ] + $invalidAttributes);
     }
 
@@ -48,7 +50,7 @@ class Select extends Control
 
     public function render()
     {
-	    return $this->view('components.form.select');
+        return $this->view('components.form.select');
 
     }
 }

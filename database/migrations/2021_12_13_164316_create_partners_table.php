@@ -15,10 +15,7 @@ return new class() extends Migration
     {
         Schema::create('partners', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unsignedSmallInteger('position')->default(0);
-            $table->boolean('is_visible')->default(false);
-            $table->integer('sort')->nullable();
+            $table->string('title');
             $table->timestamps();
         });
     }

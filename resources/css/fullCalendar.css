@@ -1,0 +1,107 @@
+.fc {
+    .fc-toolbar-title {
+        @apply text-lg font-semibold capitalize text-[#0D0D0D];
+    }
+
+    .fc-prev-button, .fc-next-button {
+        @apply text-[0.75em]
+    }
+
+    .fc-toolbar {
+        @apply justify-center gap-x-[18px];
+
+        &.fc-header-toolbar {
+            @apply mt-[1.5em];
+        }
+    }
+
+    .fc-col-header {
+        @apply gradient-to-98 text-white;
+
+        .fc-col-header-cell {
+            @apply border-none;
+        }
+
+        .fc-col-header-cell-cushion {
+            @apply pt-[0.5em] pb-[0.5em] px-[0.75em];
+        }
+    }
+
+    .fc-daygrid-day-top {
+        @apply justify-center;
+    }
+
+    .fc-daygrid-day-number {
+        @apply p-[7px]
+    }
+
+    .fc-daygrid-event-harness {
+        @apply h-full;
+
+        + .fc-daygrid-event-harness {
+            @apply hidden;
+        }
+    }
+
+    .fc-daygrid-event {
+        @apply h-full !m-0 !p-0 justify-center rounded-none;
+    }
+
+    .fc-daygrid-day-events {
+        @apply !absolute w-full h-full top-0 !m-0;
+    }
+
+    .fc-event {
+        @apply bg-white flex items-center text-[1rem] font-semibold text-[#0D0D0D];
+    }
+
+    .fc-daygrid-day.fc-day-today {
+        @apply bg-white;
+    }
+
+    .fc-day-other {
+        @apply text-[#D6D6D6] !font-normal;
+
+        .fc-event {
+            @apply text-[#D6D6D6] !font-normal;
+        }
+    }
+
+    .fc-event:hover, .selected-day .fc-event {
+
+        z-index: 8;
+        @apply gradient-to-98 text-white cursor-pointer;
+
+        .fc-event-main {
+            @apply !text-white;
+        }
+
+    }
+    .fc-daygrid-day-number {
+        z-index: 7;
+    }
+
+    .fc-h-event {
+        @apply border-none;
+    }
+    .fc-day-past,.fc-daygrid-day-top {
+        @apply pointer-events-none;
+    }
+
+
+    .fc-day-future, .fc-day-today {
+        .fc-h-event {
+            z-index: 9;
+            position: relative;
+            .fc-event-main {
+                @apply text-[1rem] font-semibold text-[#0D0D0D];
+            }
+        }
+    }
+}
+
+#calendar {
+    @apply text-[#999999];
+
+
+}

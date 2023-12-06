@@ -2,8 +2,8 @@
 
 namespace App\View\Components\Form;
 
-use Illuminate\View\Component;
 use App\Traits\Themeable;
+use Illuminate\View\Component;
 
 class Field extends Component
 {
@@ -16,8 +16,8 @@ class Field extends Component
 
     public function render()
     {
-       
-	    return $this->view('components.form.field');
 
-	}
+        return $this->view('components.form.field');
+
+    }
 }

@@ -2,46 +2,48 @@
 
 namespace App\Models;
 
+use App\Traits\Search;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Celebrity extends Model implements HasMedia
 {
     use HasFactory;
+    use Search;
     use InteractsWithMedia;
 
-    const PLACEHOLDER_IMAGE_URL = 'https://demofilament.test/placeholder.png';
-
-    protected $casts = [
-        'featured' => 'boolean',
-        'is_visible' => 'boolean',
-        'published_at' => 'date',
-        'variations' => 'array',
-        'scheduleRules' => 'array',
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'description',
+        'images',
+        'featured_image',
+        'user_id',
+        'slug',
+        'is_featured',
     ];
 
-    public function weeklySchedules()
-    {
-        return $this->hasMany(WeeklySchedule::class);
-    }
+    protected $searchable = [
+        'first_name',
+        'last_name',
+        'description',
+    ];
 
-    public function overrideDates()
-    {
-        return $this->hasMany(OverrideDate::class);
-    }
+    protected $casts = [
+        'is_featured' => 'boolean',
+        'published_at' => 'date',
+    ];
 
-    public function services()
+    public function partner()
     {
-        return $this->hasMany(Service::class);
+        return $this->belongsTo(Partner::class);
     }
-
 
     public function getCategoryAttribute()
     {
@@ -58,10 +60,16 @@ class Celebrity extends Model implements HasMedia
         return $this->belongsToMany(Category::class, 'category_celebrity', 'celebrity_id', 'category_id')->withTimestamps();
     }
 
-    public function comments(): MorphMany
+    public function schedules()
     {
-        return $this->morphMany(Comment::class, 'commentable');
+        return $this->hasMany(Schedule::class);
     }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
 
     public function getImagesAttribute()
     {
@@ -71,7 +79,7 @@ class Celebrity extends Model implements HasMedia
             return $celebrityImages->map(fn($image) => $image->getUrl());
         }
 
-        return [self::PLACEHOLDER_IMAGE_URL];
+        return collect();
     }
 
     public function getImageAttribute()
@@ -80,7 +88,16 @@ class Celebrity extends Model implements HasMedia
         if ($featuredImage) {
             return $featuredImage->getUrl();
         }
-
-        return self::PLACEHOLDER_IMAGE_URL;
     }
+
+    public function scheduleRules()
+    {
+        return $this->hasMany(ScheduleRule::class);
+    }
+
+    public function scheduleRuleExceptions()
+    {
+        return $this->hasMany(ScheduleRuleException::class);
+    }
+
 }

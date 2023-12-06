@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
-
+use App\Services\BookingService;
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Component;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,38 +19,48 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if (request()->path() === 'admin/login'):
-            FilamentView::registerRenderHook(
-                'panels::body.start',
-                fn() => view('filament.app.sections.header')
-            );
-            FilamentView::registerRenderHook(
-                'panels::body.end',
-                fn() => view('filament.app.sections.footer')
-            );
-        endif;
-
-        if (request()->path() === 'admin/profile'):
-            FilamentView::registerRenderHook(
-                'panels::content.start',
-                fn() => view('filament.app.sections.profile')
-            );
-        endif;
-
+        $this->app->singleton('bookingService', function ($app) {
+            return new BookingService();
+        });
+        FilamentView::registerRenderHook(
+            'panels::auth.login.form.before',
+            fn() => view('components.fill-user-by-role')
+        );
+        //        $includedRoutes = [
+        //            'admin/login',
+        //            'admin/register',
+        //            'admin/password/reset',
+        //            'admin/password/email',
+        //            'admin/password/reset/{token}',
+        //        ];
+        //
+        //        if (in_array(request()->path(), $includedRoutes)) {
+        //            FilamentView::registerRenderHook(
+        //                'panels::body.start',
+        //                fn() => view('livewire.header')
+        //            );
+        //            FilamentView::registerRenderHook(
+        //                'panels::body.end',
+        //                fn() => view('sections.footer')
+        //            );
+        //        }
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
     public function boot()
     {
         Model::unguard();
         Schema::defaultStringLength(191);
-
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
+
+        Component::macro('notify', function ($event) {
+            $this->dispatch('notify', [
+                'title' => $event['title'],
+                'description' => $event['message'],
+                'type' => $event['type'] ?? 'success',
+            ]);
+        });
+
     }
 }

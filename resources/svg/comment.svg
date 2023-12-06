@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="75" height="60" viewBox="0 0 75 60">
+  <defs>
+    <linearGradient id="linear-gradient" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#fe3448"/>
+      <stop offset="1" stop-color="#e82399"/>
+    </linearGradient>
+  </defs>
+  <path id="preparez-questions" d="M16.875-10.312,11.25-7.5V-15H0V-52.5H48.75V-15H26.25Zm0-6.293,6.855-3.434,1.184-.6H43.125V-46.875H5.625v26.25h11.25ZM30-11.25h5.625v5.625H50.074l1.184.6,6.867,3.422v-4.02h11.25v-26.25H52.5V-37.5H75V0H63.75V7.5L58.125,4.688,48.75,0H30V-11.25ZM17.191-39.727a4.531,4.531,0,0,1,4.535-4.535h4.723a5.119,5.119,0,0,1,5.121,5.121A5.115,5.115,0,0,1,28.992-34.7L26.25-33.117v2.566H22.5V-35.3l.938-.539,3.68-2.109a1.393,1.393,0,0,0,.691-1.2,1.373,1.373,0,0,0-1.371-1.371H21.715a.785.785,0,0,0-.785.785v.539H17.18v-.539Zm5.191,12.621h3.984v3.984H22.383Z" transform="translate(0 52.5)" fill="url(#linear-gradient)"/>
+</svg>

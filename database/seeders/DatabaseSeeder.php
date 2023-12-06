@@ -6,29 +6,35 @@ use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    const IMAGE_URL = 'https://demofilament.test/placeholder.png';
-    const CUSTOMER_COUNT = 3;
+    //    const IMAGE_URL = 'https://source.unsplash.com/random/800x800/?img=1';
+    const IMAGE_URL = 'https://demofilament.test/images/placeholder.png';
+
+    const CUSTOMER_COUNT = 1;
+
     const CELEBRITY_COUNT = 1;
+
     const PARTNER_COUNT = 5;
-    const CATEGORY_COUNT = 5;
-    const SERVICE_COUNT = 1;
-    const ORDER_PER_CUSTOMER_COUNT = 1;
-    const ORDER_ITEM_COUNT = 1;
-    const WEEKLY_SCHEDULE_COUNT = 7;
-    const TIME_SLOT_COUNT = 2;
-    const OVERRIDE_DATE_COUNT = 1;
-    const OVERRIDE_DATE_TIME_SLOT_COUNT = 2;
+
+    const CATEGORY_COUNT = 0;
+
+    const ORDER_PER_CUSTOMER_COUNT = 2;
+
+    const ORDER_ITEM_COUNT = 3;
+
+    const INTERVAL_PER_SCHEDULE_RULE_COUNT = 2;
+    const INTERVAL_PER_SCHEDULE_RULE_EXCEPTION_COUNT = 0;
+
+    const SCHEDULE_RULE_EXCEPTION_COUNT = 0;
 
     public function run(): void
     {
         $this->call([
-            RolesSeeder::class,
-            AdminSeeder::class,
             CategoriesSeeder::class,
             CustomersSeeder::class,
             CelebritiesSeeder::class,
             PartnersSeeder::class,
             OrdersSeeder::class,
+            ShieldSeeder::class
         ]);
     }
 }

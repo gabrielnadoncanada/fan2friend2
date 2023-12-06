@@ -11,6 +11,6 @@ class Textarea extends Control
 
     public function render()
     {
-	    return $this->view('components.form.textarea');
-	}
+        return $this->view('components.form.textarea');
+    }
 }

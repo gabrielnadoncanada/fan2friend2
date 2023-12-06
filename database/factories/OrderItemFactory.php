@@ -2,10 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Celebrity;
-use App\Models\Order;
-use App\Models\Service;
-use App\Models\TimeSlot;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderItemFactory extends Factory
@@ -13,10 +9,13 @@ class OrderItemFactory extends Factory
     public function definition(): array
     {
         return [
-            'order_id' => Order::factory(),
-            'service_id' => Service::factory(),
-            'time_slot_id' => TimeSlot::factory(),
-            'celebrity_id' => Celebrity::factory(),
+            'unit_price' => $this->faker->randomFloat(2, 80, 400),
+            'quantity' => 1,
+            'total_price' => $this->faker->randomFloat(2, 80, 400),
+            'scheduled_date' => fake()->date,
+            'duration' => 5,
+            'start_time' => fake()->time,
+            'status' => 'pending',
         ];
     }
 }

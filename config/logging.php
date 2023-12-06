@@ -57,7 +57,11 @@ return [
         'flare' => [
             'driver' => 'flare',
         ],
-
+        'jitsi' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/jitsi.log'),
+            'level' => 'info',
+        ],
         'single' => [
             'driver' => 'single',
             'path' => storage_path('logs/laravel.log'),

@@ -3,16 +3,30 @@
 namespace Database\Factories;
 
 use App\Models\Partner;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\UnreachableUrl;
 
 class PartnerFactory extends Factory
 {
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->company(),
-            'is_visible' => $this->faker->boolean(),
+            'title' => $this->faker->unique()->company(),
         ];
+    }
+
+    public function configure(): PartnerFactory
+    {
+        return $this->afterCreating(function (Partner $partner) {
+            try {
+                $partner
+                    ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
+                    ->toMediaCollection('partner-featured-image');
+
+            } catch (UnreachableUrl $exception) {
+                return;
+            }
+        });
     }
 }

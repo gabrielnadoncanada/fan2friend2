@@ -7,16 +7,16 @@ use Illuminate\View\Component;
 
 class Nav extends Component
 {
-	use Themeable;
+    use Themeable;
 
-	public function __construct($as = 'a', $theme = 'default')
-	{
-		$this->as = $as;
-		$this->theme = $theme;
-	}
+    public function __construct($as = 'a', $theme = 'default')
+    {
+        $this->as = $as;
+        $this->theme = $theme;
+    }
 
-	public function render()
-	{
-		return view('components.nav');
-	}
+    public function render()
+    {
+        return view('components.nav');
+    }
 }

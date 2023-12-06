@@ -3,6 +3,7 @@
 namespace App\Filament\Pages\Auth;
 
 use Filament\Pages\Auth\Login as BasePage;
+use Filament\Support\Facades\FilamentView;
 
 class Login extends BasePage
 {
@@ -10,10 +11,37 @@ class Login extends BasePage
     {
         parent::mount();
 
-        $this->form->fill([
-            'email' => 'admin@filamentphp.com',
-            'password' => 'password',
-            'remember' => true,
-        ]);
+
     }
+
+    public function fillUserByRole($role): void
+    {
+        $values = [];
+
+        switch ($role) {
+            case 'admin':
+                $values = [
+                    'email' => 'admin@fan2friend.app',
+                    'password' => 'password',
+                    'remember' => true,
+                ];
+                break;
+            case 'celebrity':
+                $values = [
+                    'email' => 'celebrity@fan2friend.app',
+                    'password' => 'password',
+                    'remember' => true,
+                ];
+                break;
+            case 'customer':
+                $values = [
+                    'email' => 'customer@fan2friend.app',
+                    'password' => 'password',
+                    'remember' => true,
+                ];
+        }
+
+        $this->form->fill($values);
+    }
+
 }

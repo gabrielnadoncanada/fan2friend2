@@ -1,7 +1,11 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 
 module.exports = {
-    content: ['./resources/**/*.blade.php', './vendor/filament/**/*.blade.php'],
+    content: [
+        './resources/**/*.blade.php',
+        './vendor/filament/**/*.blade.php',
+        './config/blade-components.php'
+    ],
     darkMode: 'class',
     theme: {
         container: {

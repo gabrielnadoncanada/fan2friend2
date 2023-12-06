@@ -2,9 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Enums\ScheduleRuleType;
-use App\Enums\ScheduleType;
-use App\Enums\ScheduleWeekDay;
 use App\Models\Celebrity;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
@@ -16,31 +13,41 @@ class CelebrityFactory extends Factory
 {
     public function definition(): array
     {
+        $first_name = $this->faker->firstName();
+        $last_name = $this->faker->lastName();
+        $full_name = $first_name . ' ' . $last_name;
+
         return [
             'user_id' => User::factory(),
-            'name' => $name = $this->faker->firstName() . ' ' . $this->faker->lastName(),
-            'slug' => Str::slug($name),
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'slug' => Str::slug($full_name),
             'description' => $this->faker->realText(),
-            'featured' => $this->faker->boolean(),
-            'is_visible' => $this->faker->boolean(),
+            'before_buffer_time' => fake()->randomDigit,
+            'after_buffer_time' => fake()->randomDigit,
+            'spot_step' => fake()->randomDigit,
+            'start_date' => fake()->date,
+            'end_date' => fake()->date,
+            'price' => fake()->randomFloat(2, 80, 400),
         ];
     }
 
-    public function configure(): CelebrityFactory
-    {
-        return $this->afterCreating(function (Celebrity $celebrity) {
-            try {
-                for ($i = 0; $i < 5; $i++) {
-                    $celebrity
-                        ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
-                        ->toMediaCollection('celebrity-images');
-                }
-                $celebrity
-                    ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
-                    ->toMediaCollection('celebrity-featured-image');
-            } catch (UnreachableUrl $exception) {
-                return;
-            }
-        });
-    }
+
+//    public function configure(): CelebrityFactory
+//    {
+//        return $this->afterCreating(function (Celebrity $celebrity) {
+//            try {
+//                for ($i = 0; $i < 3; $i++) {
+//                    $celebrity
+//                        ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
+//                        ->toMediaCollection('celebrity-images');
+//                }
+//                $celebrity
+//                    ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
+//                    ->toMediaCollection('celebrity-featured-image');
+//            } catch (UnreachableUrl $exception) {
+//                return;
+//            }
+//        });
+//    }
 }

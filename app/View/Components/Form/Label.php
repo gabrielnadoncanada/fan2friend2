@@ -2,15 +2,16 @@
 
 namespace App\View\Components\Form;
 
+use App\Traits\Themeable;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
-use App\Traits\Themeable;
 
 class Label extends Component
 {
     use Themeable;
 
     public $for;
+
     public $value;
 
     public function __construct($for = null, $value = null, $theme = 'default')
@@ -22,7 +23,7 @@ class Label extends Component
 
     public function render()
     {
-	    return $this->view('components.form.label');
+        return $this->view('components.form.label');
 
     }
 

@@ -2,8 +2,8 @@
 
 namespace App\View\Components;
 
-use Illuminate\View\Component;
 use App\Traits\Themeable;
+use Illuminate\View\Component;
 
 class Text extends Component
 {

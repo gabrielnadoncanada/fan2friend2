@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('waiting_rooms', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_item_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['waiting', 'in_session', 'completed'])->default('waiting');
-            $table->timestamp('entered_at')->nullable();
-            $table->timestamp('session_started_at')->nullable();
-            $table->timestamp('session_ended_at')->nullable();
+            $table->foreignId('celebrity_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->timestamp('entered_at');
+            $table->text('meeting_url')->nullable();
+            $table->string('status')->default('waiting');
             $table->timestamps();
         });
     }

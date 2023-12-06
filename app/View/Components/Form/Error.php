@@ -2,17 +2,20 @@
 
 namespace App\View\Components\Form;
 
+use App\Traits\Themeable;
 use Illuminate\Support\ViewErrorBag;
 use Illuminate\View\Component;
-use App\Traits\Themeable;
 
 class Error extends Component
 {
     use Themeable;
 
     public $id;
+
     public $for;
+
     public $value;
+
     public $bag;
 
     public function __construct($for, $value = null, $bag = 'default', $theme = 'default')
@@ -26,7 +29,7 @@ class Error extends Component
 
     public function render()
     {
-	    return $this->view('components.form.error');
+        return $this->view('components.form.error');
 
     }
 

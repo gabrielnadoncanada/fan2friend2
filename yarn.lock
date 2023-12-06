@@ -25,6 +25,28 @@
   resolved "https://registry.yarnpkg.com/@esbuild/linux-loong64/-/linux-loong64-0.15.18.tgz#128b76ecb9be48b60cf5cfc1c63a4f00691a3239"
   integrity sha512-L4jVKS82XVhw2nvzLg/19ClLWg0y27ulRwuP7lcyL6AbUWB5aPglXY3M21mauDQMDfRLs8cQmeT03r/+X3cZYQ==
 
+"@fullcalendar/core@^6.1.9":
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/core/-/core-6.1.9.tgz#ea735b0dd0a0a487969ebbb6c99b0967e07568c0"
+  integrity sha512-eeG+z9BWerdsU9Ac6j16rpYpPnE0wxtnEHiHrh/u/ADbGTR3hCOjCD9PxQOfhOTHbWOVs7JQunGcksSPu5WZBQ==
+  dependencies:
+    preact "~10.12.1"
+
+"@fullcalendar/daygrid@^6.1.9":
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/daygrid/-/daygrid-6.1.9.tgz#efb8aabb2f928ac0b05a77c5443accb546ae5818"
+  integrity sha512-o/6joH/7lmVHXAkbaa/tUbzWYnGp/LgfdiFyYPkqQbjKEeivNZWF1WhHqFbhx0zbFONSHtrvkjY2bjr+Ef2quQ==
+
+"@fullcalendar/interaction@^6.1.9":
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/interaction/-/interaction-6.1.9.tgz#9023922df24c296cb7f4671887f1731f5d5a5db2"
+  integrity sha512-I3FGnv0kKZpIwujg3HllbKrciNjTqeTYy3oJG226oAn7lV6wnrrDYMmuGmA0jPJAGN46HKrQqKN7ItxQRDec4Q==
+
+"@fullcalendar/rrule@^6.1.9":
+  version "6.1.9"
+  resolved "https://registry.yarnpkg.com/@fullcalendar/rrule/-/rrule-6.1.9.tgz#ddf0f0e9086368dd35cf42b1b2e838adf14e4c7e"
+  integrity sha512-SHLo5XTadMEsAMYiGduKUpZZi/o5MLe6fEUNwstUmHQ1JKybE80/H7mQe9KS0jn2HDWg2rxxOc5AHcPWPhEt5A==
+
 "@jridgewell/gen-mapping@^0.3.2":
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.3.tgz#7e02e6eb5df901aaedb08514203b096614024098"
@@ -700,6 +722,11 @@ postcss@^8.4.18, postcss@^8.4.23, postcss@^8.4.24:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+preact@~10.12.1:
+  version "10.12.1"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.12.1.tgz#8f9cb5442f560e532729b7d23d42fd1161354a21"
+  integrity sha512-l8386ixSsBdbreOAkqtrwqHwdvR35ID8c3rKPa8lCWuO86dBi32QWHV4vfsZK1utLLFMvw+Z5Ad4XLkZzchscg==
+
 queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
@@ -739,6 +766,13 @@ rollup@^2.79.1:
   integrity sha512-uKxbd0IhMZOhjAiD5oAFp7BqvkA4Dv47qpOCtaNvng4HBwdbWtdOh8f5nZNuk2rp51PMGk3bzfWu5oayNEuYnw==
   optionalDependencies:
     fsevents "~2.3.2"
+
+rrule@^2.8.1:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/rrule/-/rrule-2.8.1.tgz#e8341a9ce3e68ce5b8da4d502e893cd9f286805e"
+  integrity sha512-hM3dHSBMeaJ0Ktp7W38BJZ7O1zOgaFEsn41PDk+yHoEtfLV+PoJt9E9xAlZiWgf/iqEqionN0ebHFZIDAp+iGw==
+  dependencies:
+    tslib "^2.4.0"
 
 run-parallel@^1.1.9:
   version "1.2.0"
@@ -835,6 +869,11 @@ ts-interface-checker@^0.1.9:
   version "0.1.13"
   resolved "https://registry.yarnpkg.com/ts-interface-checker/-/ts-interface-checker-0.1.13.tgz#784fd3d679722bc103b1b4b8030bcddb5db2a699"
   integrity sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==
+
+tslib@^2.4.0:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
+  integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
 
 update-browserslist-db@^1.0.13:
   version "1.0.13"

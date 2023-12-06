@@ -20,6 +20,6 @@ class Checkbox extends Control
 
     public function render()
     {
-	    return $this->view('components.form.checkbox');
+        return $this->view('components.form.checkbox');
     }
 }

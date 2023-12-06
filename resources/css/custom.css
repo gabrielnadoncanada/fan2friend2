@@ -2,8 +2,13 @@
     background: linear-gradient(98deg, #FE3448 0%, #E82399 100%) 0 0 no-repeat padding-box !important;
 }
 
+.gradient-gray {
+    background: transparent linear-gradient(101deg, #D6D6D6 0%, #BBBBBB 100%) 0 0 no-repeat padding-box !important;;
+}
+
+
 .btn {
-    @apply text-[15px] px-[30px] font-bold py-[22px] rounded-[300px] leading-[0];
+    @apply text-[15px] px-[30px] py-[15px] font-bold  rounded-[300px]  text-center;
 }
 
 input[type="radio"]:checked, input[type="radio"]:checked ~ label {
@@ -14,4 +19,22 @@ input[type="radio"]:checked, input[type="radio"]:checked ~ label {
     @apply gradient-to-98;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+
+.fa-sharp {
+    font-family: "Font Awesome 6 Sharp", serif;
+}
+
+.arrow-next::after {
+    content: "\f061";
+}
+
+.arrow-previous::after {
+    content: "\f060";
+}
+
+.arrow-next::after,
+.arrow-previous::after {
+    @apply fa-sharp;
+    font-weight: 900;
 }

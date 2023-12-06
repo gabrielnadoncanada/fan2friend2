@@ -5,72 +5,48 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CategoryResource\Pages\CreateCategory;
 use App\Filament\Resources\CategoryResource\Pages\EditCategory;
 use App\Filament\Resources\CategoryResource\Pages\ListCategories;
-use App\Filament\Resources\CategoryResource\RelationManagers\CelebritiesRelationManager;
 use App\Models\Category;
 use Filament\Forms;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $slug = 'categories';
-
     protected static ?string $recordTitleAttribute = 'name';
-
-    protected static ?string $navigationGroup = 'Shop';
 
     protected static ?string $navigationIcon = 'heroicon-o-tag';
 
     protected static ?int $navigationSort = 3;
+
+    protected static ?string $label = 'catégorie';
+
+    protected static ?string $title = 'catégorie';
+
+    protected static ?string $pluralLabel = 'catégories';
+
+    protected static ?string $pluralModelLabel = 'catégories';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make()
-                    ->schema([
-                        Forms\Components\Grid::make()
-                            ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->required()
-                                    ->maxValue(50)
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
-
-                                Forms\Components\TextInput::make('slug')
-                                    ->disabled()
-                                    ->dehydrated()
-                                    ->required()
-                                    ->unique(Category::class, 'slug', ignoreRecord: true),
-                            ]),
-
-                        Forms\Components\MarkdownEditor::make('description')
-                            ->label('Description'),
-                    ])
-                    ->columnSpan(['lg' => fn(?Category $record) => $record === null ? 3 : 2]),
+                    ->schema(static::getFormSchema())
+                    ->columnSpan(['lg' => 2]),
                 Forms\Components\Group::make()
                     ->schema([
-                        Forms\Components\Section::make('Status')
+                        Forms\Components\Section::make('Image à la une')
                             ->schema([
-                                Forms\Components\Toggle::make('is_visible')
-                                    ->label('Visible')
-                                    ->default(true),
-                            ]),
-                        Forms\Components\Section::make('Featured image')
-                            ->schema([
-                                SpatieMediaLibraryFileUpload::make('category-featured-image')
+                                Forms\Components\SpatieMediaLibraryFileUpload::make('featured_image')
                                     ->collection('category-featured-image')
-                                    ->multiple()
-                                    ->maxFiles(5)
-                                    ->disableLabel(),
+                                    ->image()
+                                    ->required()
+                                    ->label('Image')
                             ]),
                     ])
                     ->columnSpan(['lg' => 1]),
@@ -82,16 +58,17 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
-                    ->label('Name')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\IconColumn::make('is_visible')
-                    ->label('Visibility')
-                    ->boolean()
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('featured_image')
+                    ->collection('category-featured-image')
+                    ->label('Image à la une'),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Titre'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Date de création')
+                    ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label('Updated Date')
+                    ->label('Dernière modification')
                     ->date()
                     ->sortable(),
             ])
@@ -102,21 +79,8 @@ class CategoryResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->groupedBulkActions([
-                Tables\Actions\DeleteBulkAction::make()
-                    ->action(function () {
-                        Notification::make()
-                            ->title('Now, now, don\'t be cheeky, leave some records for others to play with!')
-                            ->warning()
-                            ->send();
-                    }),
+                Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            CelebritiesRelationManager::class,
-        ];
     }
 
     public static function getPages(): array
@@ -125,6 +89,26 @@ class CategoryResource extends Resource
             'index' => ListCategories::route('/'),
             'create' => CreateCategory::route('/create'),
             'edit' => EditCategory::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getFormSchema(): array
+    {
+        return [
+            Forms\Components\Grid::make()
+                ->schema([
+                    Forms\Components\TextInput::make('title')
+                        ->label('Titre')
+                        ->required()
+                        ->maxValue(50)
+                        ->live(onBlur: true)
+                        ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
+                    Forms\Components\TextInput::make('slug')
+                        ->disabled()
+                        ->dehydrated()
+                        ->required()
+                        ->unique(Category::class, 'slug', ignoreRecord: true),
+                ]),
         ];
     }
 }

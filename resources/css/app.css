@@ -2,6 +2,7 @@
 @import './typography.css';
 @import './fonts.css';
 @import './custom.css';
+@import './fullCalendar.css';
 
 @tailwind base;
 @tailwind components;
@@ -9,7 +10,7 @@
 
 
 ::placeholder {
-    @apply leading-[20px] !text-almost-black text-[15px];
+    @apply leading-[20px] text-dark-gray-2 text-[15px];
 }
 
 
@@ -23,10 +24,17 @@
 }
 
 
+
+
 .grid-auto-rows-28 {
     grid-auto-rows: 28px;
 }
 
 .grid-auto-rows-28 td {
     @apply h-full flex items-center justify-center;
+}
+
+
+.rounded-select {
+    background-position: right 30px center;
 }
