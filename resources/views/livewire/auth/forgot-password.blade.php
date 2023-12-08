@@ -1,4 +1,4 @@
-<div class="pt-[85px]">
+<div class="">
     <div class="container mx-auto w-[475px] my-[140px] leading-[1]">
         <h1 class="text-[36px] font-bold text-dark text-center mb-5">{{__('app.forgot-password.title')}}</h1>
         <p class="mb-6 leading-[1.5]">

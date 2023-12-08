@@ -5,7 +5,6 @@ namespace App\Http\Livewire\Celebrity;
 use App\Enums\OrderStatus;
 use App\Enums\WaitingRoomStatus;
 use App\Models\Celebrity;
-use App\Models\OrderItem;
 use App\Models\WaitingRoom;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -38,65 +37,49 @@ class MeetingComponent extends Component
     {
         $this->user = Auth::user();
 
-        dd($this);
+        $this->waitingRoomEntry = $this->getUserWaitingRoomEntry();
 
-
-
-
-//        $this->orderItem = $this->getActiveOrderItemForCurrentCelebrity();
-//
-//        if ($this->orderItem) {
-//            $this->updateWaitingRoomEntry();
-//        }
+        if (
+            (
+                $this->waitingRoomEntry
+            && $this->waitingRoomEntry->status === WaitingRoomStatus::IN_SESSION
+            && $this->waitingRoomEntry->orderItem->status === OrderStatus::PAID
+            ) || $this->user->hasRole('Host')
+        ) {
+            $this->waitingRoomEntry->update([
+                'session_started_at' => now()->format('Y-m-d H:i:s'),
+            ]);
+            $this->meetingUrl = 'https://localhost:8443/' . $this->celebrity->slug . '?jwt=' . $this->token;
+        } else {
+            //            $this->redirect(route('celebrity.index'));
+        }
     }
 
-//    private function getActiveOrderItemForCurrentCelebrity()
-//    {
-//        return OrderItem::where('celebrity_id', $this->celebrity->id)
-//            ->where('scheduled_date', $this->currentDate)
-//            ->join('orders', 'orders.id', '=', 'order_items.order_id')
-//            ->where('orders.user_id', $this->user->id)
-//            ->where('order_items.status', OrderStatus::PAID)->first();
-//    }
-//
-//    private function checkMeetingStatus()
-//    {
-//        if (isset($this->waitingRoomEntry->meeting_url)) {
-//            $this->meetingUrl = $this->waitingRoomEntry->meeting_url;
-//        }
-//    }
-//
-//
-//    private function updateWaitingRoomEntry()
-//    {
-//        $this->waitingRoomEntry = WaitingRoom::updateOrCreate(
-//            [
-//                'order_item_id' => $this->orderItem->id,
-//                'celebrity_id' => $this->celebrity->id,
-//                'start_time' => $this->orderItem->start_time,
-//                'scheduled_date' => $this->orderItem->scheduled_date,
-//            ],
-//            [
-//                'status' => WaitingRoomStatus::IN_SESSION,'end_time' => now()
-//            ]
-//        );
-//    }
-//
-//
-//    public function checkMeetingTime()
-//    {
-//        $startTime = Carbon::parse($this->waitingRoomEntry->entered_at);
-//        $endTime = Carbon::parse($this->waitingRoomEntry->entered_at)->addMinutes($this->orderItem->duration);
-//
-//        if ($startTime > $endTime) {
-//            $this->isTimeCollapsed = true;
-//            $this->waitingRoomEntry->update([
-//                'status' => WaitingRoomStatus::COMPLETED,
-//                'session_ended_at' => now(),
-//            ]);
-//        }
-//    }
-//
+    private function getUserWaitingRoomEntry()
+    {
+        return $this->waitingRoomEntry = WaitingRoom::where('celebrity_id', $this->celebrity->id)
+            ->where('user_id', $this->user->id)
+            ->where('status', WaitingRoomStatus::IN_SESSION)->first();
+    }
+
+    public function checkMeetingTime()
+    {
+        $currentTime = Carbon::now();
+
+        $endTime = Carbon::parse($this->waitingRoomEntry->session_started_at)->addMinutes($this->waitingRoomEntry->orderItem->duration);
+
+        if ($currentTime > $endTime && ! $this->user->hasRole('Host')) {
+            $this->isTimeCollapsed = true;
+            $this->waitingRoomEntry->update([
+                'status' => WaitingRoomStatus::COMPLETED,
+            ]);
+
+            $this->waitingRoomEntry->orderItem->update([
+                'status' => OrderStatus::DELIVERED,
+            ]);
+        }
+    }
+
     public function render()
     {
         return view('livewire.celebrity.meeting')->layout('layouts.blank');

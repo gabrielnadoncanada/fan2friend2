@@ -10,8 +10,6 @@ use App\Filament\Resources\CelebrityResource\RelationManagers\OrderItemsRelation
 use App\Models\Celebrity;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -50,7 +48,7 @@ class CelebrityResource extends Resource
                                     ->collection('celebrity-featured-image')
                                     ->label('Image')
                                     ->image()
-                                    ->required()
+                                    ->required(),
                             ]),
                         Forms\Components\Section::make('Associations')
                             ->schema([
@@ -95,12 +93,12 @@ class CelebrityResource extends Resource
                     Forms\Components\TextInput::make('first_name')
                         ->label('Prénom')
                         ->live(onBlur: true)
-                        ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set, Forms\Get $get) => static::updateSlug($operation, $set, $get))
+                        ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => static::updateSlug($operation, $set, $get))
                         ->required(),
                     Forms\Components\TextInput::make('last_name')
                         ->label('Nom')
                         ->live(onBlur: true)
-                        ->afterStateUpdated(fn(string $operation, $state, Forms\Set $set, Forms\Get $get) => static::updateSlug($operation, $set, $get))
+                        ->afterStateUpdated(fn (string $operation, $state, Forms\Set $set, Forms\Get $get) => static::updateSlug($operation, $set, $get))
                         ->required(),
                     Forms\Components\TextInput::make('slug')
                         ->disabled()
@@ -136,11 +134,8 @@ class CelebrityResource extends Resource
                     Forms\Components\Datepicker::make('start_date')
                         ->live()
                         ->minDate(now()->format('Y-m-d'))
-                        ->afterStateUpdated(fn(Set $set, $state) => $set('end_date', $state ?: now()->format('Y-m-d')))
                         ->required(),
-
                     Forms\Components\Datepicker::make('end_date')
-                        ->minDate(fn(Get $get) => $get('start_date') ?: now()->format('Y-m-d'))
                         ->required(),
                 ])
                 ->collapsible()
@@ -322,8 +317,8 @@ class CelebrityResource extends Resource
         ];
     }
 
-
-    public static function getIntervals($interval) {
+    public static function getIntervals($interval)
+    {
         $intervals = [];
 
         for ($hour = 0; $hour < 24; $hour++) {

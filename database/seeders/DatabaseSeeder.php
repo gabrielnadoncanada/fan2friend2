@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
     const ORDER_ITEM_COUNT = 3;
 
     const INTERVAL_PER_SCHEDULE_RULE_COUNT = 2;
+
     const INTERVAL_PER_SCHEDULE_RULE_EXCEPTION_COUNT = 0;
 
     const SCHEDULE_RULE_EXCEPTION_COUNT = 0;
@@ -34,7 +35,6 @@ class DatabaseSeeder extends Seeder
             CelebritiesSeeder::class,
             PartnersSeeder::class,
             OrdersSeeder::class,
-            ShieldSeeder::class
         ]);
     }
 }

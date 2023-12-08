@@ -4,12 +4,8 @@ namespace App\Services;
 
 use App\Enums\OrderStatus;
 use App\Models\Celebrity;
-use App\Models\OrderItem;
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class BookingService
 {
@@ -17,9 +13,9 @@ class BookingService
     {
         $cacheKey = "celebrity.{$celebrity->id}.availabilities";
 
-//        if (Cache::has($cacheKey)) {
-//            return Cache::get($cacheKey);
-//        }
+        //        if (Cache::has($cacheKey)) {
+        //            return Cache::get($cacheKey);
+        //        }
 
         $celebrity = $this->loadCelebritySchedule($celebrity);
         $exceptionsByWeekday = $this->mapExceptionsByWeekday($celebrity->scheduleRuleExceptions);
@@ -98,7 +94,7 @@ class BookingService
     {
         $interval = DB::table('intervals')->find($intervalId);
 
-        if (!$interval) {
+        if (! $interval) {
             throw new \Exception('Interval not found');
         }
 
@@ -109,8 +105,6 @@ class BookingService
             ->whereTime('end_time', '<=', $interval->end_time)
             ->sum(DB::raw('TIMESTAMPDIFF(MINUTE, start_time, end_time) + ' . $celebrity->before_buffer_time . ' + ' . $celebrity->after_buffer_time));
 
-
-
-        return $interval->total_available_minutes - (int)$usedMinutes >= ($celebrity->spot_step + $celebrity->before_buffer_time + $celebrity->after_buffer_time);
+        return $interval->total_available_minutes - (int) $usedMinutes >= ($celebrity->spot_step + $celebrity->before_buffer_time + $celebrity->after_buffer_time);
     }
 }

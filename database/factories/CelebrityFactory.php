@@ -28,26 +28,25 @@ class CelebrityFactory extends Factory
             'spot_step' => fake()->randomDigit,
             'start_date' => fake()->date,
             'end_date' => fake()->date,
-            'price' => fake()->randomFloat(2, 80, 400),
+
         ];
     }
 
-
-//    public function configure(): CelebrityFactory
-//    {
-//        return $this->afterCreating(function (Celebrity $celebrity) {
-//            try {
-//                for ($i = 0; $i < 3; $i++) {
-//                    $celebrity
-//                        ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
-//                        ->toMediaCollection('celebrity-images');
-//                }
-//                $celebrity
-//                    ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
-//                    ->toMediaCollection('celebrity-featured-image');
-//            } catch (UnreachableUrl $exception) {
-//                return;
-//            }
-//        });
-//    }
+    //    public function configure(): CelebrityFactory
+    //    {
+    //        return $this->afterCreating(function (Celebrity $celebrity) {
+    //            try {
+    //                for ($i = 0; $i < 3; $i++) {
+    //                    $celebrity
+    //                        ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
+    //                        ->toMediaCollection('celebrity-images');
+    //                }
+    //                $celebrity
+    //                    ->addMediaFromUrl(DatabaseSeeder::IMAGE_URL)
+    //                    ->toMediaCollection('celebrity-featured-image');
+    //            } catch (UnreachableUrl $exception) {
+    //                return;
+    //            }
+    //        });
+    //    }
 }

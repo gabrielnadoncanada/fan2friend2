@@ -21,12 +21,11 @@ class OrdersSeeder extends Seeder
                 ->create(
                     [
                         'status' => OrderStatus::PAID,
-                        'user_id' => $user->id
+                        'user_id' => $user->id,
                     ]
                 )
                 ->each(function ($order) {
                     $celebrity = Celebrity::all()->random(1)->first();
-
 
                     OrderItem::factory()
                         ->count(DatabaseSeeder::ORDER_ITEM_COUNT)
@@ -36,6 +35,7 @@ class OrdersSeeder extends Seeder
                             'scheduled_date' => now()->format('Y-m-d'),
                             'start_time' => $celebrity->scheduleRules->first()->intervals->first()->start_time,
                             'status' => OrderStatus::PAID,
+                            'duration' => 1,
                         ]);
                 });
         });

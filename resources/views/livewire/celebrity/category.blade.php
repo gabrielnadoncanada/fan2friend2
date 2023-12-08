@@ -1,7 +1,7 @@
-<div class="pt-[85px]">
+<div class="">
     @include('sections.hero',[
      'title' => __('app.home.hero.title'),
-     'imageUrl' => 'https://images.unsplash.com/photo-1498758536662-35b82cd15e29?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2102&q=80'
+     'imageUrl' => asset('images/unnamed2.jpeg')
  ])
     <section class="mt-[70px]">
         <div class="mx-auto max-w-[1440px] border-b border-[#D6D6D6] pb-[70px]">

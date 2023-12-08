@@ -1,23 +1,18 @@
-<header class="absolute top-0 w-full left-0 z-10 h-[85px]">
-    <div
-        class=" border-[#D6D6D6]  max-w-[1440px]  mx-auto flex items-center justify-between gap-x-[30px] py-[20px]">
-        <div class="flex gap-x-[72px] items-center">
-            <a href="/" title="{{__('Back to home')}}">
-                <img src="{{asset('svg/logo.svg')}}" alt="">
-            </a>
-        </div>
-
-        <div class="flex items-center gap-x-4">
-            <div class="flex items-center gap-x-2 mr-5">
-                <x-header.language-switcher/>
-                <livewire:cartCountComponent/>
-            </div>
-
+<header class="w-full left-0 z-10 bg-white">
+    <div class="border-[#D6D6D6] flex flex-col-reverse lg:flex-row lg:items-center  max-w-[1440px]
+         mx-auto  lg:justify-normal justify-between gap-x-[30px] lg:py-[20px] lg:px-4">
+        <a href="/" title="{{__('Back to home')}}" class="max-w-[175px]">
+            <img src="{{asset('svg/logo.svg')}}" alt="">
+        </a>
+        <x-header.search :search="$search" :celebrities="$celebrities"/>
+        <x-header.language-switcher class="ml-auto"/>
+        <x-header.cart-count :cart-count="$cartCount"/>
+        <div class="order-4">
             @if(Auth::check())
                 <div class="relative" x-data="Components.popover({ open: false, focus: false })" x-init="init()"
                      @keydown.escape="onEscape" @close-popover-group.window="onClosePopoverGroup">
                     <button type="button"
-                            class="inline-flex items-center gap-x-1  pl-[40px] btn text-white gradient-to-98"
+                            class="inline-flex items-center gap-x-1  max-lg:px-0 lg:pl-[40px] btn text-white gradient-to-98"
                             @click="toggle" @mousedown="if (open) $event.preventDefault()" aria-expanded="true"
                             :aria-expanded="open.toString()">
                         <span>{{__('app.header.options')}}</span>

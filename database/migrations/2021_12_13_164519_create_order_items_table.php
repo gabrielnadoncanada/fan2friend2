@@ -26,7 +26,7 @@ return new class() extends Migration
                 "DATE_FORMAT(scheduled_date, '%W')"
             );
             $table->time('end_time')->virtualAs(
-                "ADDTIME(start_time, SEC_TO_TIME(duration * quantity * 60))"
+                'ADDTIME(start_time, SEC_TO_TIME(duration * quantity * 60))'
             );
             $table->string('status')->default('pending');
             $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');

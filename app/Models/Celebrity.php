@@ -3,20 +3,18 @@
 namespace App\Models;
 
 use App\Traits\Search;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Celebrity extends Model implements HasMedia
 {
     use HasFactory;
-    use Search;
     use InteractsWithMedia;
+    use Search;
 
     protected $fillable = [
         'first_name',
@@ -70,13 +68,12 @@ class Celebrity extends Model implements HasMedia
         return $this->hasMany(OrderItem::class);
     }
 
-
     public function getImagesAttribute()
     {
         $celebrityImages = $this->getMedia('celebrity-images');
 
         if ($celebrityImages->count() > 0) {
-            return $celebrityImages->map(fn($image) => $image->getUrl());
+            return $celebrityImages->map(fn ($image) => $image->getUrl());
         }
 
         return collect();
@@ -99,5 +96,4 @@ class Celebrity extends Model implements HasMedia
     {
         return $this->hasMany(ScheduleRuleException::class);
     }
-
 }

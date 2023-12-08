@@ -4,6 +4,12 @@ use App\View\Components;
 
 return [
     'components' => [
+        'accordion' => [
+            'class' => Components\Accordion::class,
+            'themes' => [
+                'default' => 'accordion pt-6',
+            ],
+        ],
         'button' => [
             'class' => Components\Button::class,
             'themes' => [
@@ -75,7 +81,7 @@ return [
                 'class' => Components\Form\Textarea::class,
                 'themes' => [
                     'default' => [
-                        'normal' => 'max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md',
+                        'normal' => 'bg-light-gray block w-full rounded-full border-0 px-[60px] pt-[18px] pb-[21px] text-almost-dark placeholder:font-normal placeholder:text-dark-gray-2 focus:ring-2 focus:ring-inset focus:ring-primary-red  leading-[20px]',
                         'invalid' => 'max-w-lg shadow-sm block w-full focus:ring-red-500 focus:border-red-500 sm:text-sm border-gray-300 rounded-md',
                         'disabled' => 'bg-gray-50 max-w-lg shadow-sm block w-full focus:ring-gray-500 focus:border-gray-500 sm:text-sm border-gray-300 rounded-md',
                     ],

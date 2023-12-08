@@ -10,7 +10,6 @@
                 <x-form.label for="firstName" required="true">
                     {{__('app.checkout.fields.firstName')}}
                 </x-form.label>
-                <label for="firstName" class="block text-sm font-medium text-gray-700"></label>
                 <div class="mt-1">
                     <x-form.input type="text" id="firstName" name="firstName" wire:model="firstName"
                                   autocomplete="given-name"></x-form.input>
@@ -18,8 +17,7 @@
                 <x-form.error for="firstName"/>
             </div>
             <div>
-                <x-form.label for="lastName"> {{__('app.checkout.fields.lastName')}}</x-form.label>
-                <label for="lastName" class="block text-sm font-medium text-gray-700"></label>
+                <x-form.label for="lastName">{{__('app.checkout.fields.lastName')}}</x-form.label>
                 <div class="mt-1">
                     <x-form.input type="text" id="lastName" name="lastName" wire:model="lastName"
                                   autocomplete="family-name"></x-form.input>
@@ -139,6 +137,14 @@
                     <x-form.error for="password"/>
                 </div>
             @endif
+            <div class="col-span-2	">
+                <x-form.label for="notes">{{__('app.checkout.fields.notes')}}</x-form.label>
+                <x-form.textarea class="textarea" name="notes" rows="4">
+                    {{__('app.checkout.fields.placeholderNotes ') }}
+                </x-form.textarea>
+                <x-form.error for="notes"/>
+            </div>
+
         </div>
     </div>
 </div>

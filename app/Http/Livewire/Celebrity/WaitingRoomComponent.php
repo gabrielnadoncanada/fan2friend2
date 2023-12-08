@@ -30,29 +30,55 @@ class WaitingRoomComponent extends Component
 
     public $waitingRoomEntry;
 
+    public $currentDate;
 
     public function mount()
     {
         $this->user = Auth::user();
         $this->enteredAt = now();
+        $this->currentDate = now()->format('Y-m-d');
+        $this->orderItem = false;
 
-        $this->orderItem = $this->getActiveOrderItemForCurrentCelebrity();
+        $scheduleRuleExceptionForCurrentDate = $this->celebrity->scheduleRuleExceptions()->where('date', $this->currentDate)->first();
 
+        if ($scheduleRuleExceptionForCurrentDate) {
+            $interval = $scheduleRuleExceptionForCurrentDate->intervals()
+                ->where('start_time', '<', now()->format('H:i'))
+                ->where('end_time', '>', now()->format('H:i'))
+                ->first();
+
+            if ($interval) {
+                $this->orderItem = $this->getActiveOrderItemForCurrentCelebrityInterval();
+            }
+        } else {
+            $scheduleRuleForCurrentDate = $this->celebrity->scheduleRules()->where('wday', now()->format('l'))->first();
+            $interval = $scheduleRuleForCurrentDate->intervals()
+                ->where('start_time', '<', now()->format('H:i'))
+                ->where('end_time', '>', now()->format('H:i'))
+                ->first();
+            if ($interval) {
+                $this->orderItem = $this->getActiveOrderItemForCurrentCelebrityInterval();
+            }
+        }
+        $this->orderItem = $this->getActiveOrderItemForCurrentCelebrityInterval($interval);
+        $this->updateWaitingRoomEntry();
+        $this->setWaitingRoomPosition();
         if ($this->orderItem) {
-            $this->updateWaitingRoomEntry();
-            $this->setWaitingRoomPosition();
+
+        } else {
+
+            //            $this->redirect(route('celebrity.index'));
         }
     }
 
-    private function getActiveOrderItemForCurrentCelebrity()
+    private function getActiveOrderItemForCurrentCelebrityInterval()
     {
         return OrderItem::where('celebrity_id', $this->celebrity->id)
-            ->where('scheduled_date', now()->format('Y-m-d'))
+            ->where('scheduled_date', $this->currentDate)
             ->join('orders', 'orders.id', '=', 'order_items.order_id')
             ->where('orders.user_id', $this->user->id)
             ->where('order_items.status', OrderStatus::PAID)->first();
     }
-
 
     private function updateWaitingRoomEntry()
     {
@@ -61,18 +87,29 @@ class WaitingRoomComponent extends Component
                 'celebrity_id' => $this->celebrity->id,
                 'user_id' => $this->user->id,
                 'status' => WaitingRoomStatus::WAITING,
+                'order_item_id' => $this->orderItem->id,
             ],
             [
-                'entered_at' => $this->enteredAt
+                'entered_at' => $this->enteredAt,
             ]
         );
     }
 
     public function setWaitingRoomPosition()
     {
-//        if ($this->currentPosition > 0) {
-//            $this->currentPosition = $this->currentPosition - 1;
-//        }
+        $waitingRoomEntries = WaitingRoom::where('celebrity_id', $this->celebrity->id)
+            ->where('status', WaitingRoomStatus::WAITING)
+            ->orWhere('status', WaitingRoomStatus::IN_SESSION)
+            ->orderBy('entered_at', 'asc')
+            ->get();
+
+        foreach ($waitingRoomEntries as $index => $entry) {
+            if ($entry->order_item_id === $this->orderItem->id) {
+                $this->currentPosition = $index + 1;
+
+                break;
+            }
+        }
     }
 
     public function joinMeeting()
@@ -95,7 +132,7 @@ class WaitingRoomComponent extends Component
         $this->waitingRoomEntry->update(['status' => WaitingRoomStatus::IN_SESSION]);
 
         $this->redirect(route('celebrity.meeting', [
-            'room' => $this->celebrity->slug,
+            'celebrity' => $this->celebrity,
             'token' => $token,
         ]));
     }

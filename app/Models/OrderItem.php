@@ -3,10 +3,8 @@
 namespace App\Models;
 
 use App\Casts\TimeCast;
-use App\Enums\OrderItemStatus;
 use App\Enums\OrderStatus;
 use App\Enums\WeekDays;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -22,9 +20,8 @@ class OrderItem extends Model
     protected $casts = [
         'start_time' => TimeCast::class,
         'wday' => WeekDays::class,
-        'status' => OrderStatus::class
+        'status' => OrderStatus::class,
     ];
-
 
     public function order()
     {
@@ -40,7 +37,6 @@ class OrderItem extends Model
     {
         return $this->belongsTo(WaitingRoom::class);
     }
-
 
     protected static function booted()
     {

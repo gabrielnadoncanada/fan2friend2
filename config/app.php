@@ -182,7 +182,7 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\JitsiServiceProvider::class,
-        App\Providers\FilamentServiceProvider::class
+        App\Providers\FilamentServiceProvider::class,
     ],
 
     /*

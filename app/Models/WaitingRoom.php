@@ -12,6 +12,11 @@ class WaitingRoom extends Model
 
     protected $casts = [
 
-        'status' => WaitingRoomStatus::class
+        'status' => WaitingRoomStatus::class,
     ];
+
+    public function orderItem()
+    {
+        return $this->belongsTo(OrderItem::class);
+    }
 }

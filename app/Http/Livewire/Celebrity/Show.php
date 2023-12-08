@@ -5,9 +5,7 @@ namespace App\Http\Livewire\Celebrity;
 use App\Facades\Booking;
 use App\Facades\Cart;
 use App\Models\Celebrity;
-use App\Services\BookingService;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\App;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -36,7 +34,7 @@ class Show extends Component
         $this->reset('intervals');
 
         foreach ($intervals as $interval) {
-            if(Booking::isIntervalAvailable($this->celebrity, $this->selectedDate, $interval['interval_id'])){
+            if (Booking::isIntervalAvailable($this->celebrity, $this->selectedDate, $interval['interval_id'])) {
                 $this->intervals[$interval['interval_id']] = [
                     'id' => $interval['interval_id'],
                     'start_time' => $interval['start_time'],

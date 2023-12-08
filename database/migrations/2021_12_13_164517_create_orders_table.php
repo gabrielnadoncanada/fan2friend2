@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class() extends Migration {
+return new class() extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -19,7 +20,7 @@ return new class() extends Migration {
             $table->decimal('total_price', 12)->nullable();
             $table->decimal('subtotal', 12)->nullable();
             $table->decimal('taxes', 12)->nullable();
-            $table->decimal('discount', 12,)->nullable();
+            $table->decimal('discount', 12)->nullable();
             $table->string('status')->default('pending');
             $table->text('notes')->nullable();
             $table->string('payment_method_id')->nullable();

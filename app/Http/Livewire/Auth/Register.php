@@ -5,9 +5,9 @@ namespace App\Http\Livewire\Auth;
 use App\Events\UserCreated;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Filament\Facades\Filament;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Livewire\Component;
 
 class Register extends Component
@@ -26,24 +26,25 @@ class Register extends Component
         'firstName' => ['required', 'string', 'max:255'],
         'lastName' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'string', 'confirmed', 'min:8'],
     ];
 
     public function register()
     {
         $this->validate();
 
+        $randomPassword = Str::random(10); // You can change '10' to any length you want
+
         $user = User::create([
             'first_name' => $this->firstName,
             'last_name' => $this->lastName,
             'email' => $this->email,
-            'password' => Hash::make($this->password),
-        ])->assignRole('customer');
+            'is_approved' => false,
+            'password' => Hash::make($randomPassword),
+        ]);
 
+        $user->assignRole('celebrity');
         event(new UserCreated($user));
-        event(new Registered($user));
-
-        Filament::auth()->login($user);
+        //        event(new Registered($user));
 
         return redirect(RouteServiceProvider::HOME)->with('status', 'Compte créé avec succès.');
     }

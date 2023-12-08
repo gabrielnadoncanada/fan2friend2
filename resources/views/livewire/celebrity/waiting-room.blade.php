@@ -1,4 +1,4 @@
-<div class="pt-[85px]">
+<div class="">
     <x-breadcrumbs
         :breadcrumbs="[
        ['route' => 'home', 'label' => 'Fan2Friend'],// Last breadcrumb without a link
@@ -19,7 +19,7 @@
             <div>
                 <div wire:poll.4s="setWaitingRoomPosition">
                     <h2 class="text-[30px] font-bold ">Il y a présentement <span
-                            class="align-middle px-1 text-[50px] font-extrabold	 text-gradient">{{ $currentPosition }}</span>personnes
+                            class="align-middle px-1 text-[50px] font-extrabold	 text-gradient">{{ $currentPosition - 1 }}</span>personnes
                         devant vous!</h2>
 
                     <div class="flex items-center gap-x-3 pt-[35px] pb-[50px]">
@@ -30,10 +30,10 @@
                         <a
                             @class([
                             'btn text-white',
-                            'disabled gradient-gray opacity-70' => $currentPosition !== 0,
-                            'gradient-to-98' => $currentPosition === 0,
+                            'disabled gradient-gray opacity-70' => $currentPosition !== 1,
+                            'gradient-to-98' => $currentPosition === 1,
                             ])
-                            wire:click="{{$currentPosition === 0 ? 'joinMeeting' : ''}}"
+                            wire:click="{{$currentPosition === 1 ? 'joinMeeting' : ''}}"
                         >Rejoindre la rencontre</a>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
 
         </div>
         <div class="col-span-5 h-[390px] overflow-hidden">
-            <video id="video" src="/374661739_682603526669086_1275610842352472967_n.mp4" controls autoplay loop muted>
+            <video id="video" src="/videoplayback.mp4" controls autoplay loop muted>
                 Your browser does not support the video tag.
             </video>
         </div>

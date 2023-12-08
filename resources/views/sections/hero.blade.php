@@ -7,9 +7,9 @@
 ])
 
 <section>
-    <div class="mx-auto max-w-[1440px] lg:grid lg:grid-cols-12 relative">
-        <div class="px-6 pb-24 pt-10 sm:pb-32 lg:col-span-7 lg:px-[70px] lg:py-[93px] xl:col-span-6 gradient-to-98">
-            <div class="mx-auto max-w-2xl lg:mx-0">
+    <div class="flex flex-col-reverse mx-auto max-w-[1440px] lg:grid lg:grid-cols-12 relative">
+        <div class="px-4 pb-14 pt-10 lg:pb-32 lg:col-span-7 lg:px-[70px] lg:py-[93px] xl:col-span-6 gradient-to-98">
+            <div class=" max-w-2xl lg:mx-0">
                 @empty(!$title)
                     <h1 class="h1 text-white">{{ $title }}</h1>
                 @endempty

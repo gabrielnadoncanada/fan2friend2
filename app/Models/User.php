@@ -36,7 +36,7 @@ class User extends Authenticatable implements FilamentUser, HasName, HasTenants,
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'state' => CanadianProvince::class
+        'state' => CanadianProvince::class,
     ];
 
     public function canAccessPanel(Panel $panel): bool

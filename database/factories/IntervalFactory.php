@@ -22,7 +22,7 @@ class IntervalFactory extends Factory
 
         return [
             'start_time' => $start_time,
-            'end_time' => $end_time
+            'end_time' => $end_time,
         ];
     }
 }

@@ -9,17 +9,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://npmcdn.com/flickity@2/dist/flickity.css">
     <script src="https://npmcdn.com/flickity@2/dist/flickity.pkgd.js"></script>
+    <script src="https://kit.fontawesome.com/8208c06456.js"></script>
 </head>
 <body>
-
-<x-notifications />
+<x-notifications/>
 <livewire:header/>
-
-<main>
-    {{ $slot }}
-</main>
+{{ $slot }}
 @include('sections.copyright')
-
 @stack('scripts')
 </body>
 </html>

@@ -28,7 +28,6 @@ class ScheduleRuleException extends Model
         return $this->morphToMany(Interval::class, 'associable', 'interval_associations');
     }
 
-
     protected static function booted()
     {
         static::deleted(function ($scheduleRuleException) {

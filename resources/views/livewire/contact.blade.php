@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    @include('sections.partners')
+{{--    @include('sections.partners')--}}
     @include('sections.footer')
 </div>
 

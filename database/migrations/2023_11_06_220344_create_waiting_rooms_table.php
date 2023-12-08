@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('celebrity_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('order_item_id')->constrained('order_items')->cascadeOnDelete();
             $table->timestamp('entered_at');
+            $table->timestamp('session_started_at')->nullable();
             $table->text('meeting_url')->nullable();
             $table->string('status')->default('waiting');
             $table->timestamps();

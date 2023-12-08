@@ -31,12 +31,12 @@ class CelebritiesSeeder extends Seeder
                     ['wday' => WeekDays::SATURDAY],
                 )
                     ->has(Interval::factory()->count(DatabaseSeeder::INTERVAL_PER_SCHEDULE_RULE_COUNT))
-                    ->state(fn(array $attributes, Celebrity $celebrity) => ['celebrity_id' => $celebrity->id])
+                    ->state(fn (array $attributes, Celebrity $celebrity) => ['celebrity_id' => $celebrity->id])
             )
             ->has(
                 ScheduleRuleException::factory()->count(DatabaseSeeder::SCHEDULE_RULE_EXCEPTION_COUNT)
                     ->has(Interval::factory()->count(DatabaseSeeder::INTERVAL_PER_SCHEDULE_RULE_EXCEPTION_COUNT))
-                    ->state(fn(array $attributes, Celebrity $celebrity) => ['celebrity_id' => $celebrity->id])
+                    ->state(fn (array $attributes, Celebrity $celebrity) => ['celebrity_id' => $celebrity->id])
             )
             ->create(
                 [

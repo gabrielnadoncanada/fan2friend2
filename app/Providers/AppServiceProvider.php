@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Observers\UserObserver;
 use App\Services\BookingService;
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Database\Eloquent\Model;
@@ -24,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
         });
         FilamentView::registerRenderHook(
             'panels::auth.login.form.before',
-            fn() => view('components.fill-user-by-role')
+            fn () => view('components.fill-user-by-role')
         );
         //        $includedRoutes = [
         //            'admin/login',
@@ -53,6 +55,7 @@ class AppServiceProvider extends ServiceProvider
         if (app()->environment('production')) {
             URL::forceScheme('https');
         }
+        User::observe(UserObserver::class);
 
         Component::macro('notify', function ($event) {
             $this->dispatch('notify', [

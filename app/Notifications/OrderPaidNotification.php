@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Filament\Resources\OrderResource;
 use App\Models\Order;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -30,8 +29,10 @@ class OrderPaidNotification extends Notification
             ->subject('Your Order is Paid')
             ->greeting('Hello!')
             ->line('Your order has been successfully paid.')
-            ->action('View Order',
-                OrderResource::getUrl('view', ['record' => $this->order]))
+            ->action(
+                'View Order',
+                route('celebrity.waiting-room', ['category' => $this->order->orderItems()->first()->celebrity->category->slug, 'celebrity' => $this->order->orderItems()->first()->celebrity])
+            )
             ->line('Thank you for your purchase!');
     }
 }

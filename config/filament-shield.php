@@ -23,7 +23,6 @@ return [
         'intercept_gate' => 'before', // after
     ],
 
-
     'panel_user' => [
         'enabled' => false,
         'name' => 'panel_user',

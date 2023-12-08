@@ -38,3 +38,23 @@ input[type="radio"]:checked, input[type="radio"]:checked ~ label {
     @apply fa-sharp;
     font-weight: 900;
 }
+
+
+.accordion ul {
+    @apply list-disc pl-4;
+}
+
+.accordion ul > li:not(:last-child),
+.accordion ul > li > *:not(:last-child),
+.accordion ol > li:not(:last-child),
+.accordion ol > li > *:not(:last-child) {
+    @apply pb-4
+}
+
+.accordion ol {
+    @apply list-decimal pl-4
+}
+
+.accordion dd {
+    @apply flex flex-col gap-y-4
+}

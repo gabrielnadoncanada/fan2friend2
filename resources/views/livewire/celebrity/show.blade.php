@@ -1,4 +1,4 @@
-<div class="pt-[85px]">
+<div class="">
     <x-breadcrumbs :breadcrumbs="[
         ['route' => 'home', 'label' => __('app.home.breadcrumb')],
         ['route' => 'celebrity.index', 'label' => __('app.personalities.breadcrumb')],
@@ -86,6 +86,7 @@
                     : {{ $celebrity->full_name }}</p>
                 <h1 class="font-bold text-[54px] leading-[1] mb-[20px]">{{ $celebrity->full_name }}</h1>
                 <div class="text-[15px] leading-[20px] mb-[20px] flex flex-col gap-y-[20px]">
+                    <img width="250" src="{{asset('images/unnamed.png')}}" alt="">
                     <p class="leading-[1.7]">{{ $celebrity->description }}</p>
                 </div>
                 <div>

@@ -1,7 +1,7 @@
-<li class="max-w-[275px] relative">
+<li class="max-w-[275px] relative mr-[15px]">
     <img width="275" height="345"
          class="w-full rounded-[24px] object-cover mb-[17px] aspect-[1/1.25]"
-         src="{{$celebrity->featured_image ??  asset('images/placeholder.png') }}"
+         src="{{$celebrity->image ??  asset('images/placeholder.png') }}"
          alt="{{$celebrity->full_name}}">
     <div class="flex flex-col gap-y-[8px] px-4">
         <h3 class="h3 text-gradient">

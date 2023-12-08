@@ -3,10 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Enums\CanadianProvince;
-use App\Filament\Resources\UserResource\RelationManagers\PaymentsRelationManager;
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\PaymentsRelationManager;
 use App\Models\User;
-use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -16,7 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
 
-class UserResource extends Resource  implements HasShieldPermissions
+class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
@@ -32,8 +31,6 @@ class UserResource extends Resource  implements HasShieldPermissions
 
     protected static ?string $title = 'utilisateur';
 
-
-
     public static function form(Form $form): Form
     {
         return $form
@@ -45,12 +42,12 @@ class UserResource extends Resource  implements HasShieldPermissions
                     ->schema([
                         Forms\Components\Placeholder::make('created_at')
                             ->label('Créé le')
-                            ->content(fn(User $record): ?string => $record->created_at?->diffForHumans())
-                            ->hidden(fn(?User $record) => $record === null),
+                            ->content(fn (User $record): ?string => $record->created_at?->diffForHumans())
+                            ->hidden(fn (?User $record) => $record === null),
                         Forms\Components\Placeholder::make('updated_at')
                             ->label('Dernière modification le')
-                            ->content(fn(User $record): ?string => $record->updated_at?->diffForHumans())
-                            ->hidden(fn(?User $record) => $record === null),
+                            ->content(fn (User $record): ?string => $record->updated_at?->diffForHumans())
+                            ->hidden(fn (?User $record) => $record === null),
                         Forms\Components\Select::make('roles')
                             ->label('Rôles')
                             ->relationship('roles', 'name')
@@ -95,7 +92,7 @@ class UserResource extends Resource  implements HasShieldPermissions
     public static function getRelations(): array
     {
         return [
-            PaymentsRelationManager::class
+            PaymentsRelationManager::class,
         ];
     }
 
@@ -121,9 +118,9 @@ class UserResource extends Resource  implements HasShieldPermissions
                                     ->email()
                                     ->unique(ignoreRecord: true)
                                     ->required()
-                                    ->dehydrated(fn(string $operation): bool => $operation === $operation::CREATE)
+                                    ->dehydrated(fn (string $operation): bool => $operation !== 'create')
                                     ->maxLength(255)
-                                    ->disabled('edit'),
+                                    ->disabled(fn (string $operation): bool => $operation !== 'create'),
                                 Forms\Components\TextInput::make('phone')
                                     ->label('Téléphone')
                                     ->maxValue(50),
@@ -161,6 +158,7 @@ class UserResource extends Resource  implements HasShieldPermissions
                         ])->columns(2),
                 ]),
             Forms\Components\Section::make('Mot de passe')
+                ->hidden(fn (?User $record) => $record === null)
                 ->collapsible()
                 ->collapsed()
                 ->schema([
@@ -169,20 +167,20 @@ class UserResource extends Resource  implements HasShieldPermissions
                             Forms\Components\TextInput::make('password')
                                 ->label('Nouveau mot de passe')
                                 ->password()
-                                ->required(fn(?User $record) => $record === null)
+                                ->required(fn (?User $record) => $record === null)
                                 ->rule(Password::default())
                                 ->autocomplete('new-password')
-                                ->dehydrated(fn($state): bool => filled($state))
-                                ->dehydrateStateUsing(fn($state): string => Hash::make($state))
+                                ->dehydrated(fn ($state): bool => filled($state))
+                                ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
                                 ->live(debounce: 500)
-                                ->hidden(fn(?User $record) => $record === null)
+                                ->hidden(fn (?User $record) => $record === null)
                                 ->same('passwordConfirmation'),
                             Forms\Components\TextInput::make('passwordConfirmation')
                                 ->label('Confirmation du mot de passe')
                                 ->password()
                                 ->required()
-                                ->hidden(fn(?User $record) => $record === null)
-                                ->visible(fn(Get $get): bool => filled($get('password')))
+                                ->hidden(fn (?User $record) => $record === null)
+                                ->visible(fn (Get $get): bool => filled($get('password')))
                                 ->dehydrated(false),
                         ])->columns(2),
                 ]),
@@ -196,20 +194,6 @@ class UserResource extends Resource  implements HasShieldPermissions
             'index' => Pages\ListUsers::route('/'),
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getPermissionPrefixes(): array
-    {
-        return [
-            'view_any',
-            'view_own',
-            'create',
-            'update_any',
-            'update_own',
-            'delete_any',
-            'delete_own',
-            //"impersonate"
         ];
     }
 }

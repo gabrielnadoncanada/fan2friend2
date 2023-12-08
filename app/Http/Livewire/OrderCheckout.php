@@ -51,6 +51,7 @@ class OrderCheckout extends Component
 
     public $user;
 
+    public $notes;
 
     protected $rules = [
         'firstName' => 'required|alpha|min:2',
@@ -64,6 +65,7 @@ class OrderCheckout extends Component
         'state' => 'required',
         'country' => 'required',
         'email' => 'required|email',
+
     ];
 
     public function mount()
@@ -210,7 +212,6 @@ class OrderCheckout extends Component
             'provider' => 'stripe',
             'method' => 'credit_card',
         ]);
-
 
         return $order;
     }

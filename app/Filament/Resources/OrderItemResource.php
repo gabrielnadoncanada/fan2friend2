@@ -65,7 +65,7 @@ class OrderItemResource extends Resource
                     ->tooltip('Open waiting room')
                     ->icon('heroicon-m-arrow-top-right-on-square')
                     ->url(function ($record): ?string {
-                        return route('celebrity.waiting-room', ['category'=> $record->celebrity->category->slug, 'celebrity' => $record->celebrity]);
+                        return route('celebrity.waiting-room', ['category' => $record->celebrity->category->slug, 'celebrity' => $record->celebrity]);
                     }, shouldOpenInNewTab: true),
             ])
             ->bulkActions([

@@ -26,7 +26,7 @@ return new class() extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->string('slug')->unique();
             $table->longText('description')->nullable();
-            $table->decimal('price', 10)->default('5.00')->nullable();
+            $table->decimal('price', 10)->default('149.99')->nullable();
             $table->integer('before_buffer_time')->nullable();
             $table->integer('after_buffer_time')->nullable();
             $table->integer('spot_step');

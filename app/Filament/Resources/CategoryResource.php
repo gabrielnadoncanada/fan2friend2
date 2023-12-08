@@ -46,7 +46,7 @@ class CategoryResource extends Resource
                                     ->collection('category-featured-image')
                                     ->image()
                                     ->required()
-                                    ->label('Image')
+                                    ->label('Image'),
                             ]),
                     ])
                     ->columnSpan(['lg' => 1]),

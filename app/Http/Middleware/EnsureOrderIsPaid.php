@@ -21,7 +21,7 @@ class EnsureOrderIsPaid
         $orderId = $request->route('order'); // Assuming 'order' is the route parameter name
         $order = Order::find($orderId);
 
-        if (!$order || $order->user_id !== Auth::id() || !$order->status == OrderStatus::PAID) {
+        if (! $order || $order->user_id !== Auth::id() || ! $order->status == OrderStatus::PAID) {
             // Redirect to a desired location or show an error message
             return redirect()->route('home');
         }

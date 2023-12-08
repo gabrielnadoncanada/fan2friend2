@@ -16,7 +16,7 @@ return new class extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->integer('total_available_minutes')->virtualAs(
-                "TIME_TO_SEC(TIMEDIFF(end_time, start_time)) / 60"
+                'TIME_TO_SEC(TIMEDIFF(end_time, start_time)) / 60'
             );
             $table->timestamps();
         });

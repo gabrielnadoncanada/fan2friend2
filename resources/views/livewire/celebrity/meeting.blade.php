@@ -1,5 +1,5 @@
 <div wire:poll="checkMeetingTime" class="h-screen flex">
-    <script src='https://localhost:8443/external_api.js'></script>
+    <script src='/external-api.js'></script>
 
 
     @if($isTimeCollapsed)
@@ -7,11 +7,11 @@
             <div x-data="{ open: true }" @keydown.window.escape="open = false"
                  x-init="$watch(&quot;open&quot;, o => !o &amp;&amp; window.setTimeout(() => (open = true), 1000))"
                  x-show="open" class="relative z-10" aria-labelledby="modal-title" x-ref="dialog" aria-modal="true">
-                <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"
-                     x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"
-                     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                     x-description="Background backdrop, show/hide based on modal state."
-                     class="fixed inset-0 bg-black bg-opacity-[90] transition-opacity"></div>
+{{--                <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0"--}}
+{{--                     x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200"--}}
+{{--                     x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"--}}
+{{--                     x-description="Background backdrop, show/hide based on modal state."--}}
+{{--                     class="fixed inset-0 bg-black bg-opacity-[90] transition-opacity"></div>--}}
                 <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
                     <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                         <div x-show="open" x-transition:enter="ease-out duration-300"

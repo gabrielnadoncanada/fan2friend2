@@ -1,4 +1,4 @@
-<div class="pt-[85px]">
+<div class="">
     <x-breadcrumbs :breadcrumbs="[['route' => 'home', 'label' => __('app.home.breadcrumb')],
         ['route' => 'cart', 'label' => __('app.cart.breadcrumb')],
 ['label' => __('app.checkout.breadcrumb')]]"/>

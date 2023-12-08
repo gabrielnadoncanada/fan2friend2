@@ -42,20 +42,19 @@ class Interval extends Model
 
     protected static function booted()
     {
-//        static::deleted(function ($interval) {
-//            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRule->id}.availabilities");
-//            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRuleException->id}.availabilities");
-//        });
-//
-//        static::updated(function ($interval) {
-//            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRule->id}.availabilities");
-//            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRuleException->id}.availabilities");
-//        });
-//
-//        static::created(function ($interval) {
-//            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRule->id}.availabilities");
-//            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRuleException->id}.availabilities");
-//        });
+        //        static::deleted(function ($interval) {
+        //            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRule->id}.availabilities");
+        //            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRuleException->id}.availabilities");
+        //        });
+        //
+        //        static::updated(function ($interval) {
+        //            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRule->id}.availabilities");
+        //            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRuleException->id}.availabilities");
+        //        });
+        //
+        //        static::created(function ($interval) {
+        //            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRule->id}.availabilities");
+        //            Cache::forget("celebrity.{$interval->celebrityThroughScheduleRuleException->id}.availabilities");
+        //        });
     }
-
 }

@@ -22,6 +22,7 @@ class ProdDataSeeder extends Seeder
         User::unsetEventDispatcher();
         Role::create(['name' => 'Customer']);
         Role::create(['name' => 'Celebrity']);
+        Role::create(['name' => 'Host']);
 
         $admin = User::firstOrCreate(
             ['email' => 'admin@fan2friend.app'],
@@ -31,19 +32,21 @@ class ProdDataSeeder extends Seeder
                 'password' => 'password',
             ]
         );
+
         $admin->assignRole(config('app.admin_role'));
 
-        $celebrity = User::firstOrCreate(
-            ['email' => 'celebrity@fan2friend.app'],
-            [
-                'first_name' => 'Celebrity',
-                'last_name' => 'Celebrity',
-                'password' => 'password',
-            ]
-        );
-        $celebrity->assignRole('Celebrity');
-
-        $customer = User::firstOrCreate(
+        //        $celebrity1 = User::firstOrCreate(
+        //            ['email' => 'celebrity@fan2friend.app'],
+        //            [
+        //                'first_name' => 'Laurent',
+        //                'last_name' => 'Duvernay-Tardif',
+        //                'password' => 'password',
+        //            ]
+        //        );
+        //
+        //        $celebrity2->assignRole('Celebrity');
+        //
+        $customer1 = User::firstOrCreate(
             ['email' => 'customer@fan2friend.app'],
             [
                 'first_name' => 'Customer',
@@ -51,18 +54,23 @@ class ProdDataSeeder extends Seeder
                 'password' => 'password',
             ]
         );
-        $customer->assignRole('Customer');
+        $customer1->assignRole('Customer');
+
+        $customer2 = User::firstOrCreate(
+            ['email' => 'customer2@fan2friend.app'],
+            [
+                'first_name' => 'Customer',
+                'last_name' => 'Customer',
+                'password' => 'password',
+            ]
+        );
+        //
+        $customer2->assignRole('Customer');
 
         Category::factory()->count(9)->sequence(
-            ['title' => 'Acteurs'],
-            ['title' => 'Athlètes'],
-            ['title' => 'Comédiens'],
-            ['title' => 'Créateurs'],
-            ['title' => 'En vedette'],
-            ['title' => 'Humoristes'],
-            ['title' => 'Influenceurs'],
-            ['title' => 'Musiciens'],
-            ['title' => 'Professionnels'],
+            ['title' => 'Humour'],
+            ['title' => 'Sport'],
+            ['title' => 'Musique'],
         )->create();
     }
 }

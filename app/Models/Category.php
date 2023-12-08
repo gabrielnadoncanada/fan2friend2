@@ -18,7 +18,6 @@ class Category extends Model implements HasMedia
         'title',
     ];
 
-
     public function celebrities(): BelongsToMany
     {
         return $this->belongsToMany(Celebrity::class, 'category_celebrity', 'category_id', 'celebrity_id');

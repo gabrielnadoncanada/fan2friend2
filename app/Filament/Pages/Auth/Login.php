@@ -3,14 +3,12 @@
 namespace App\Filament\Pages\Auth;
 
 use Filament\Pages\Auth\Login as BasePage;
-use Filament\Support\Facades\FilamentView;
 
 class Login extends BasePage
 {
     public function mount(): void
     {
         parent::mount();
-
 
     }
 
@@ -25,6 +23,7 @@ class Login extends BasePage
                     'password' => 'password',
                     'remember' => true,
                 ];
+
                 break;
             case 'celebrity':
                 $values = [
@@ -32,6 +31,7 @@ class Login extends BasePage
                     'password' => 'password',
                     'remember' => true,
                 ];
+
                 break;
             case 'customer':
                 $values = [
@@ -43,5 +43,4 @@ class Login extends BasePage
 
         $this->form->fill($values);
     }
-
 }

@@ -8,6 +8,6 @@ class Faq extends Component
 {
     public function render()
     {
-        return view('livewire.faq');
+        return view('livewire.faqs');
     }
 }

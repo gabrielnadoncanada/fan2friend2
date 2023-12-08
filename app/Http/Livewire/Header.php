@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Facades\Cart;
 use App\Models\Celebrity;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Header extends Component
@@ -11,8 +13,11 @@ class Header extends Component
 
     public $search = '';
 
+    public $cartCount;
+
     public function mount()
     {
+        $this->updateCartCount();
         $this->locale = session('locale') ?? config('app.locale');
     }
 
@@ -21,6 +26,12 @@ class Header extends Component
         app()->setLocale($this->locale);
         session()->put('locale', $this->locale);
         $this->redirect(url()->previous());
+    }
+
+    #[On('cartUpdated')]
+    public function updateCartCount()
+    {
+        $this->cartCount = Cart::content()->count();
     }
 
     public function render()
